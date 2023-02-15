@@ -29,6 +29,6 @@ body:
     id: notes
     attributes:
       label: Other Notes
-      placeholder: ""
+      placeholder: "Any other notes"
     validations:
       required: false
