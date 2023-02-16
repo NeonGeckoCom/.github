@@ -80,6 +80,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.default_model_meta.outputs.tags }}
-          labels: ${{ steps.default_model_meta.outputs.labels }}
+          tags: ${{ steps.extra_meta.outputs.tags }}
+          labels: ${{ steps.extra_meta.outputs.labels }}
           target: ${{ inputs.extra_tag }}
