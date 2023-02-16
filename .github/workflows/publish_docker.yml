@@ -8,10 +8,16 @@ on:
       extra_tag:
         type: string
         required: false
+      registry:
+        type: string
+        default: ghcr.io
+      image_name:
+        type: string
+        default: ${{ github.repository }}
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY: ${{ inputs.registry }}
+  IMAGE_NAME: ${{ inputs.image_name }}
 
 jobs:
   build_and_publish_base_docker:
