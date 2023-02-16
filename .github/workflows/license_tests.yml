@@ -25,10 +25,10 @@ jobs:
           sudo apt install python3-dev swig libssl-dev libfann-dev portaudio19-dev libpulse-dev
       - name: Install repo
         run: |
-          if [ -n ${{ inputs.packate-extras }} ]; then
-            pip install .[${{ inputs.packate-extras }}]
-          else
+          if [ -z ${{ inputs.package-extras }} ]; then
             pip install .
+          else
+            pip install .[${{ inputs.package-extras }}]
           fi
       - name: Get explicit and transitive dependencies
         run: |
