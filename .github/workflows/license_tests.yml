@@ -1,6 +1,10 @@
 name: Run License Tests
 on:
   workflow_call:
+    inputs:
+      package-extras:
+        required: false
+        type: string
 
 jobs:
   license_tests:
@@ -21,7 +25,11 @@ jobs:
           sudo apt install python3-dev swig libssl-dev libfann-dev portaudio19-dev libpulse-dev
       - name: Install repo
         run: |
-          pip install .
+          if [ -n ${{ inputs.packate-extras }} ]; then
+            pip install .[${{ inputs.packate-extras }}]
+          else
+            pip install .
+          fi
       - name: Get explicit and transitive dependencies
         run: |
           pip freeze > requirements-all.txt
