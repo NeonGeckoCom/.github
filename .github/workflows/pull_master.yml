@@ -15,6 +15,7 @@ jobs:
   pull_changes:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: pull-request-action
         uses: repo-sync/pull-request@v2
         with:
