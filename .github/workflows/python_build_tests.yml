@@ -1,11 +1,11 @@
 name: Python Build Tests
 on:
   workflow_call:
-  inputs:
-    python_version:
-      required: false
-      type: string
-      default: "3.8"
+    inputs:
+      python_version:
+        required: false
+        type: string
+        default: "3.8"
 jobs:
   py_build_tests:
     timeout-minutes: 15
