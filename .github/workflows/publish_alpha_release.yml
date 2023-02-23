@@ -5,6 +5,9 @@ on:
       version_file:
         type: string
         default: "version.py"
+      setup_py:
+        type: string
+        default: "setup.py"
     outputs:
       version:
         description: Updated Alpha version
@@ -23,7 +26,7 @@ jobs:
       - name: Checkout Scripts Repo
         uses: actions/checkout@v2
         with:
-          path: action/scripts/
+          path: action/github/
           repository: NeonGeckoCom/.github
           ref: FEAT_SharedScripts
       - name: Setup Python
@@ -36,8 +39,8 @@ jobs:
       - name: Increment Alpha Version
         id: version
         run: |
-          python action/github/scripts/version_bump.py action/skill/${{ inputs.version_file }}
-          echo ::set-output name=version::$(sed "s/a/-a./" <<< $(python action/package/setup.py --version))
+          python action/github/scripts/version_bump.py action/package/${{ inputs.version_file }}
+          echo ::set-output name=version::$(sed "s/a/-a./" <<< $(python action/package/${{ inputs.setup_py }} --version))
       - name: Push Version Change
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
