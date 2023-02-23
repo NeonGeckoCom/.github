@@ -45,6 +45,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Increment Version
+          repository: action/package/
       - name: Build Distribution Packages
         run: |
           python action/package/${{ inputs.setup_py }} bdist_wheel
