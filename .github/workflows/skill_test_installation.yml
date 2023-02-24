@@ -33,6 +33,6 @@ jobs:
           pip install pytest mock ovos-skills-manager
       - name: Test Skill Intents
         run: |
-          export TEST_URL="https://github.com/${{inputs.repository}}"
+          export TEST_REPO=${{inputs.repository}}
           export TEST_BRANCH=${{inputs.branch}}
           pytest action/github/test/test_skill_osm_install.py
