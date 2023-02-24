@@ -118,7 +118,7 @@ class TestSkillLoading(unittest.TestCase):
                     registered_regex.setdefault(lang, dict())
                     regex = msg["data"]["regex"].split(
                         '<', 1)[1].split('>', 1)[0].replace(
-                        self.test_skill_id.replace('.', '_'), '').lower()
+                        self.test_skill_id.replace('.', '_'), '')
                     registered_regex[lang].setdefault(regex, list())
                     registered_regex[lang][regex].append(msg["data"]["regex"])
                 else:
