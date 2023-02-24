@@ -20,7 +20,9 @@ jobs:
       - name: Checkout Scripts Repo
         uses: actions/checkout@v2
         with:
+          repository: NeonGeckoCom/.github
           path: action/github/
+          ref: FEAT_SharedSkillTests
       - name: Set up python 3.10
         uses: actions/setup-python@v2
         with:
