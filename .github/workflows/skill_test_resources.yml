@@ -19,6 +19,7 @@ jobs:
         with:
           repository: NeonGeckoCom/.github
           path: action/github/
+          ref: FEAT_SkillFailureLogging
       - name: Set up python 3.10
         uses: actions/setup-python@v2
         with:
