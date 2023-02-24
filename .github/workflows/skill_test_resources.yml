@@ -34,4 +34,5 @@ jobs:
           pip install pytest mock ovos-core[skills] action/skill/
       - name: Test Skill Resources
         run: |
-          pytest action/github/test/test_skill_resources.py ${{inputs.skill_module}} ${{inputs.skill_class}} "action/skill/test/test_resources.yaml"
+          cd action/skill
+          pytest ../github/test/test_skill_resources.py ${{inputs.skill_module}} ${{inputs.skill_class}} "action/skill/test/test_resources.yaml"
