@@ -37,7 +37,9 @@ from ovos_skills_manager import SkillEntry
 
 class TestOSM(unittest.TestCase):
     def test_osm_install(self):
-        skill = SkillEntry.from_github_url(environ.get("TEST_URL"))
+        branch = environ.get("TEST_BRANCH")
+        install_url = f"{environ.get('TEST_URL')}@{branch}"
+        skill = SkillEntry.from_github_url(install_url)
         tmp_skills = "/tmp/osm_installed_skills"
         skill_folder = f"{tmp_skills}/{skill.uuid}"
 
