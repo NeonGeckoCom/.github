@@ -34,4 +34,5 @@ jobs:
           pip install pytest mock ovos-core[skills] action/skill/
       - name: Test Skill Resources
         run: |
-          pytest action/github/test/test_skill_resources.py "action/skill/test/test_resources.yaml"
+          export RESOURCE_TEST_FILE="action/skill/test/test_resources.yaml"
+          pytest action/github/test/test_skill_resources.py

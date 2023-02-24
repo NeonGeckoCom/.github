@@ -29,7 +29,7 @@
 import unittest
 import yaml
 
-from sys import argv
+from os import getenv
 from mock import Mock
 from ovos_utils.messagebus import FakeBus
 from mycroft_bus_client import Message
@@ -41,6 +41,7 @@ class TestSkillIntentMatching(unittest.TestCase):
     assert len(skills) == 1
     skill = skills[0]
 
+    test_intents = getenv("INTENT_TEST_FILE")
     with open(test_intents) as f:
         valid_intents = yaml.safe_load(f)
 
@@ -97,6 +98,4 @@ class TestSkillIntentMatching(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    global test_intents
-    test_intents = argv[1]
     unittest.main()

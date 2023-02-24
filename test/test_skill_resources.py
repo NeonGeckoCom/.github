@@ -31,7 +31,7 @@ import os
 import json
 import yaml
 
-from sys import argv
+from os import getenv
 from ovos_plugin_manager.skills import load_skill_plugins
 from ovos_utils.messagebus import FakeBus
 
@@ -44,6 +44,7 @@ class TestSkillLoading(unittest.TestCase):
     skills = load_skill_plugins()
     assert len(skills) == 1
 
+    test_resources = getenv("RESOURCE_TEST_FILE")
     with open(test_resources) as f:
         resources = yaml.safe_load(f)
 
@@ -158,6 +159,4 @@ class TestSkillLoading(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    global test_resources
-    test_resources = argv[1]
     unittest.main()
