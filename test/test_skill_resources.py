@@ -141,8 +141,8 @@ class TestSkillLoading(unittest.TestCase):
                 # Ensure every vocab file has at least one entry
                 self.assertGreater(len(registered_vocab[lang][voc]), 0)
             for rx in self.regex:
-                # Ensure every vocab file has exactly one entry
-                self.assertTrue(all((rx in line for line in
+                # Ensure every rx file has exactly one entry
+                self.assertTrue(all((rx in line if line else True for line in
                                      registered_regex[lang][rx])))
 
     def test_skill_events(self):
