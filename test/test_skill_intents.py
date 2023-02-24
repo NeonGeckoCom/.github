@@ -26,7 +26,6 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import importlib
 import unittest
 import yaml
 
@@ -34,10 +33,13 @@ from sys import argv
 from mock import Mock
 from ovos_utils.messagebus import FakeBus
 from mycroft_bus_client import Message
+from ovos_plugin_manager.skills import load_skill_plugins
 
 
 class TestSkillIntentMatching(unittest.TestCase):
-    skill = Skill()
+    skills = load_skill_plugins()
+    assert len(skills) == 1
+    skill = skills[0]
 
     with open(test_intents) as f:
         valid_intents = yaml.safe_load(f)
@@ -95,10 +97,6 @@ class TestSkillIntentMatching(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    global Skill
     global test_intents
-    skill_module = argv[1]
-    skill_class = argv[2]
-    test_intents = argv[3]
-    Skill = getattr(importlib.import_module(skill_module), skill_class)
+    test_intents = argv[1]
     unittest.main()

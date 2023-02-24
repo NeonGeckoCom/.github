@@ -30,9 +30,9 @@ import unittest
 import os
 import json
 import yaml
-import importlib
 
 from sys import argv
+from ovos_plugin_manager.skills import load_skill_plugins
 from ovos_utils.messagebus import FakeBus
 
 
@@ -41,12 +41,14 @@ class TestSkillLoading(unittest.TestCase):
     Test skill loading, intent registration, and langauge support. Test cases
     are generic, only class variables should be modified per-skill.
     """
+    skills = load_skill_plugins()
+    assert len(skills) == 1
 
     with open(test_resources) as f:
         resources = yaml.safe_load(f)
 
     # Static parameters
-    skill = Skill()
+    skill = skills[0]
     bus = FakeBus()
     messages = list()
     test_skill_id = 'test_skill.test'
@@ -156,10 +158,6 @@ class TestSkillLoading(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    global Skill
     global test_resources
-    skill_module = argv[1]
-    skill_class = argv[2]
-    test_resources = argv[3]
-    Skill = getattr(importlib.import_module(skill_module), skill_class)
+    test_resources = argv[1]
     unittest.main()
