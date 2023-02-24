@@ -2,12 +2,9 @@ name: Skill Unit Tests
 on:
   workflow_call:
     inputs:
-      skill_module:
+      resource_file:
         type: string
-        required: true
-      skill_class:
-        type: string
-        required: true
+        default: test/test_resources.yaml
 jobs:
   test_resources:
     runs-on: ubuntu-latest
@@ -34,5 +31,5 @@ jobs:
           pip install pytest mock ovos-core[skills] action/skill/
       - name: Test Skill Resources
         run: |
-          export RESOURCE_TEST_FILE="action/skill/test/test_resources.yaml"
+          export RESOURCE_TEST_FILE="action/skill/${{inputs.resource_file}}"
           pytest action/github/test/test_skill_resources.py
