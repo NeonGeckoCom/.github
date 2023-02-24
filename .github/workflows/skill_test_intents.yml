@@ -1,0 +1,35 @@
+name: Skill Unit Tests
+on:
+  workflow_call:
+    inputs:
+      skill_module:
+        type: string
+        required: true
+      skill_class:
+        type: string
+        required: true
+jobs:
+  test_intents:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          path: action/skill/
+      - name: Checkout Scripts Repo
+        uses: actions/checkout@v2
+        with:
+          path: action/github/
+      - name: Set up python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+      - name: Install Dependencies
+        run: |
+          sudo apt install -y gcc libfann-dev swig libssl-dev portaudio19-dev git libpulse-dev
+          pip install --upgrade pip
+          pip install pytest mock ovos-core[skills] action/skill/
+      - name: Test Skill Intents
+        run: |
+          pytest action/github/test/test_skill_intents.py ${{inputs.skill_module}} ${{inputs.skill_class}} "action/skill/test/test_intents.yaml"
