@@ -98,7 +98,7 @@ class TestSkillLoading(unittest.TestCase):
     def test_skill_setup(self):
         self.assertEqual(self.skill.skill_id, self.test_skill_id)
         for msg in self.messages:
-            self.assertEqual(msg["context"]["skill_id"], self.test_skill_id,
+            self.assertEqual(msg["context"].get("skill_id"), self.test_skill_id,
                              msg)
 
     def test_intent_registration(self):
