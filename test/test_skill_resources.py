@@ -161,6 +161,7 @@ class TestSkillLoading(unittest.TestCase):
             for dialog in self.dialog:
                 file = self.skill.find_resource(f"{dialog}.dialog", "dialog",
                                                 lang)
+                self.assertIsInstance(file, str, f"{dialog} in {self.dialog}")
                 self.assertTrue(os.path.isfile(file), dialog)
 
 
