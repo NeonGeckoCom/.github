@@ -8,12 +8,15 @@ on:
       setup_py:
         type: string
         default: "setup.py"
+      publish_prerelease:
+        type: boolean
+        default: False
     outputs:
       version:
         description: Updated Alpha version
         value: ${{jobs.build_and_publish_pypi.outputs.version}}
 jobs:
-  build_and_publish_pypi:
+  bump_version:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -45,6 +48,24 @@ jobs:
         with:
           commit_message: Increment Version
           repository: action/package/
+  build_and_publish_pypi:
+    needs: bump_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          path: action/package/
+      - name: Checkout Scripts Repo
+        uses: actions/checkout@v2
+        with:
+          path: action/github/
+          repository: NeonGeckoCom/.github
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.10"
       - name: Build Distribution Packages
         run: |
           cd action/package
@@ -54,3 +75,21 @@ jobs:
         with:
           packages_dir: action/package/dist/
           password: ${{secrets.PYPI_TOKEN}}
+  tag_prerelease:
+    if: ${{inputs.publish_prerelease}}
+    needs: bump_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          path: action/package/
+      - name: Create Pre-release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          tag: ${{bump_version.outputs.version}}
+          commit: ${{ github.ref }}
+          prerelease: true
+          generateReleaseNotes: true
