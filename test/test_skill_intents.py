@@ -44,7 +44,7 @@ class TestSkillIntentMatching(unittest.TestCase):
     test_intents = getenv("INTENT_TEST_FILE")
     with open(test_intents) as f:
         valid_intents = yaml.safe_load(f)
-
+    negative_intents = valid_intents.pop('NEGATIVE_INTENT_TESTS', dict())
     from mycroft.skills.intent_service import IntentService
     bus = FakeBus()
     intent_service = IntentService(bus)
@@ -98,6 +98,23 @@ class TestSkillIntentMatching(unittest.TestCase):
                             self.assertEqual(intent_message.data.get(voc_id),
                                              value, utt)
                     intent_handler.reset_mock()
+
+    def test_negative_intents(self):
+        intent_handler = Mock()
+        failure_event = "complete_intent_failure"
+        self.skill.events.add(failure_event, intent_handler)
+        for lang in self.negative_intents.keys():
+            for utt in self.negative_intents[lang]:
+                message = Message('test_utterance',
+                                  {"utterances": [utt], "lang": lang})
+                self.intent_service.handle_utterance(message)
+                try:
+                    intent_handler.assert_called_once()
+                except AssertionError as e:
+                    raise AssertionError(utt) from e
+                intent_message = intent_handler.call_args[0][0]
+                self.assertIsInstance(intent_message, Message, utt)
+                self.assertEqual(intent_message.msg_type, failure_event, utt)
 
 
 if __name__ == "__main__":
