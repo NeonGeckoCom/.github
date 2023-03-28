@@ -77,6 +77,8 @@ jobs:
           tags: ${{ steps.base_meta.outputs.tags }}
           labels: ${{ steps.base_meta.outputs.labels }}
           target: ${{ inputs.base_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Extract metadata for extra Docker
         if: "${{ inputs.extra_tag != '' }}"
