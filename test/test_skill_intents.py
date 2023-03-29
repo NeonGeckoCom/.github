@@ -101,23 +101,19 @@ class TestSkillIntentMatching(unittest.TestCase):
                                              value, utt)
                     intent_handler.reset_mock()
 
-    @patch('ovos_utils.sound.play_error_sound')
-    def test_negative_intents(self, _):
-        intent_handler = Mock()
-        failure_event = "complete_intent_failure"
-        self.skill.events.add(failure_event, intent_handler)
+    def test_negative_intents(self):
+        intent_failure = Mock()
+        self.intent_service.send_complete_intent_failure = intent_failure
         for lang in self.negative_intents.keys():
             for utt in self.negative_intents[lang]:
                 message = Message('test_utterance',
                                   {"utterances": [utt], "lang": lang})
                 self.intent_service.handle_utterance(message)
                 try:
-                    intent_handler.assert_called_once()
+                    intent_failure.assert_called_once_with(message)
+                    intent_failure.reset_mock()
                 except AssertionError as e:
                     raise AssertionError(utt) from e
-                intent_message = intent_handler.call_args[0][0]
-                self.assertIsInstance(intent_message, Message, utt)
-                self.assertEqual(intent_message.msg_type, failure_event, utt)
 
 
 if __name__ == "__main__":
