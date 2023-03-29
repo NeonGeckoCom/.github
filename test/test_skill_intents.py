@@ -30,7 +30,7 @@ import unittest
 import yaml
 
 from os import getenv
-from mock import Mock
+from mock import Mock, patch
 from ovos_utils.messagebus import FakeBus
 from mycroft_bus_client import Message
 from ovos_plugin_manager.skills import load_skill_plugins
@@ -101,7 +101,8 @@ class TestSkillIntentMatching(unittest.TestCase):
                                              value, utt)
                     intent_handler.reset_mock()
 
-    def test_negative_intents(self):
+    @patch('ovos_utils.sound.play_error_sound')
+    def test_negative_intents(self, _):
         intent_handler = Mock()
         failure_event = "complete_intent_failure"
         self.skill.events.add(failure_event, intent_handler)
