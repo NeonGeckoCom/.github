@@ -34,6 +34,7 @@ from mock import Mock, patch
 from ovos_utils.messagebus import FakeBus
 from mycroft_bus_client import Message
 from ovos_plugin_manager.skills import load_skill_plugins
+from ovos_utils.log import LOG
 
 
 class TestSkillIntentMatching(unittest.TestCase):
@@ -120,7 +121,8 @@ class TestSkillIntentMatching(unittest.TestCase):
                     intent_failure.assert_called_once_with(message)
                     intent_failure.reset_mock()
                 except AssertionError as e:
-                    raise AssertionError(last_message) from e
+                    LOG.error(last_message)
+                    raise AssertionError(utt) from e
 
 
 if __name__ == "__main__":
