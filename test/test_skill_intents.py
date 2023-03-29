@@ -50,11 +50,17 @@ class TestSkillIntentMatching(unittest.TestCase):
     bus = FakeBus()
     intent_service = IntentService(bus)
     test_skill_id = 'test_skill.test'
+    last_message = None
 
     @classmethod
     def setUpClass(cls) -> None:
         cls.skill.config_core["secondary_langs"] = list(cls.valid_intents.keys())
         cls.skill._startup(cls.bus, cls.test_skill_id)
+
+        def _on_message(msg):
+            cls.last_message = msg
+
+        cls.bus.on("message", _on_message)
 
     def test_intents(self):
         for lang in self.valid_intents.keys():
@@ -77,6 +83,7 @@ class TestSkillIntentMatching(unittest.TestCase):
                     try:
                         intent_handler.assert_called_once()
                     except AssertionError as e:
+                        LOG.error(self.last_message)
                         raise AssertionError(utt) from e
                     intent_message = intent_handler.call_args[0][0]
                     self.assertIsInstance(intent_message, Message, utt)
@@ -109,15 +116,6 @@ class TestSkillIntentMatching(unittest.TestCase):
         intent_failure = Mock()
         self.intent_service.send_complete_intent_failure = intent_failure
 
-        real_pad_low = self.intent_service.padatious_service.match_low = None
-
-        last_message = None
-
-        def _on_message(msg):
-            nonlocal last_message
-            last_message = msg
-
-        self.bus.on("message", _on_message)
         for lang in self.negative_intents.keys():
             for utt in self.negative_intents[lang]:
                 message = Message('test_utterance',
@@ -127,7 +125,7 @@ class TestSkillIntentMatching(unittest.TestCase):
                     intent_failure.assert_called_once_with(message)
                     intent_failure.reset_mock()
                 except AssertionError as e:
-                    LOG.error(last_message)
+                    LOG.error(self.last_message)
                     raise AssertionError(utt) from e
 
 
