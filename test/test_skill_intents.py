@@ -102,7 +102,15 @@ class TestSkillIntentMatching(unittest.TestCase):
                                              value, utt)
                     intent_handler.reset_mock()
 
-    def test_negative_intents(self):
+    @patch("mycroft.skills.intent_services.padatious_service.PadatiousMatcher.match_low")
+    def test_negative_intents(self, pad_low):
+        pad_low.return_value = None
+
+        intent_failure = Mock()
+        self.intent_service.send_complete_intent_failure = intent_failure
+
+        real_pad_low = self.intent_service.padatious_service.match_low = None
+
         last_message = None
 
         def _on_message(msg):
@@ -110,8 +118,6 @@ class TestSkillIntentMatching(unittest.TestCase):
             last_message = msg
 
         self.bus.on("message", _on_message)
-        intent_failure = Mock()
-        self.intent_service.send_complete_intent_failure = intent_failure
         for lang in self.negative_intents.keys():
             for utt in self.negative_intents[lang]:
                 message = Message('test_utterance',
