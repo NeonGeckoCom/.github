@@ -102,6 +102,13 @@ class TestSkillIntentMatching(unittest.TestCase):
                     intent_handler.reset_mock()
 
     def test_negative_intents(self):
+        last_message = None
+
+        def _on_message(msg):
+            nonlocal last_message
+            last_message = msg
+
+        self.bus.on("message", _on_message)
         intent_failure = Mock()
         self.intent_service.send_complete_intent_failure = intent_failure
         for lang in self.negative_intents.keys():
@@ -113,7 +120,7 @@ class TestSkillIntentMatching(unittest.TestCase):
                     intent_failure.assert_called_once_with(message)
                     intent_failure.reset_mock()
                 except AssertionError as e:
-                    raise AssertionError(utt) from e
+                    raise AssertionError(last_message) from e
 
 
 if __name__ == "__main__":
