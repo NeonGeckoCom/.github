@@ -44,7 +44,7 @@ class TestSkillIntentMatching(unittest.TestCase):
     test_intents = getenv("INTENT_TEST_FILE")
     with open(test_intents) as f:
         valid_intents = yaml.safe_load(f)
-    negative_intents = valid_intents.pop('NEGATIVE_INTENT_TESTS', dict())
+    negative_intents = valid_intents.pop('unmatched intents', dict())
     from mycroft.skills.intent_service import IntentService
     bus = FakeBus()
     intent_service = IntentService(bus)
@@ -57,6 +57,8 @@ class TestSkillIntentMatching(unittest.TestCase):
 
     def test_intents(self):
         for lang in self.valid_intents.keys():
+            self.assertIsInstance(lang.split('-')[0], str)
+            self.assertIsInstance(lang.split('-')[1], str)
             for intent, examples in self.valid_intents[lang].items():
                 intent_event = f'{self.test_skill_id}:{intent}'
                 self.skill.events.remove(intent_event)
