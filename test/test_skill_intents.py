@@ -47,7 +47,7 @@ class MockPadatiousMatcher(PadatiousMatcher):
     include_low = False
 
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        PadatiousMatcher.__init__(self, *args, **kwargs)
         LOG.debug("Creating test Padatious Matcher")
 
     def match_medium(self, utterances, lang=None, __=None):
