@@ -48,14 +48,17 @@ class MockPadatiousMatcher(PadatiousMatcher):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
+        LOG.debug("Creating test Padatious Matcher")
 
     def match_medium(self, utterances, lang=None, __=None):
         if not self.include_med:
+            LOG.info(f"Skipping medium confidence check for {utterances}")
             return None
         PadatiousMatcher.match_medium(self, utterances, lang=lang)
 
     def match_low(self, utterances, lang=None, __=None):
         if not self.include_low:
+            LOG.info(f"Skipping low confidence check for {utterances}")
             return None
         PadatiousMatcher.match_low(self, utterances, lang=lang)
 
