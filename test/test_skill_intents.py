@@ -135,7 +135,7 @@ class TestSkillIntentMatching(unittest.TestCase):
                                              value, utt)
                     intent_handler.reset_mock()
 
-    @patch("mycroft.skills.intent_services.padatious_service.PadatiousMatcher",
+    @patch("mycroft.skills.intent_service.PadatiousMatcher",
            new=MockPadatiousMatcher)
     def test_negative_intents(self):
         test_config = self.negative_intents.pop('config', None)
