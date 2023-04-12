@@ -53,10 +53,10 @@ def bump_version(version_file: str, version_spec: str):
 
     # Alpha Release
     if version_spec == "alpha":
-        if alpha:
-            alpha = int(alpha) + 1
-        else:
+        if not alpha:
             alpha = 0
+            minor = int(minor) + 1
+        alpha = int(alpha) + 1
     else:
         alpha = None
 
