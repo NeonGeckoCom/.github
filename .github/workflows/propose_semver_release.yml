@@ -7,6 +7,9 @@ on:
         default: "version.py"
       release_type:
         type: string
+      setup_py:
+        type: string
+        default: "setup.py"
 jobs:
   bump_version:
     runs-on: ubuntu-latest

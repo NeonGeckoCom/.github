@@ -5,6 +5,9 @@ on:
       version_file:
         type: string
         default: "version.py"
+      setup_py:
+        type: string
+        default: "setup.py"
 jobs:
   bump_version:
     runs-on: ubuntu-latest
