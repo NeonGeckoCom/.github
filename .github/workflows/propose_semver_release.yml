@@ -1,4 +1,4 @@
-name: Publish Alpha Build
+name: Propose Stable Release
 on:
   workflow_call:
     inputs:
