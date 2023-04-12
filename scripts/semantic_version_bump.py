@@ -45,9 +45,11 @@ def bump_version(version_file: str, version_spec: str):
         major = parts[0]
         minor = parts[1]
         patch, alpha = parts[2].split('a', 1)
+        was_alpha = True
     else:
         major, minor, patch = parts
         alpha = None
+        was_alpha = False
 
     # Alpha Release
     if version_spec == "alpha":
@@ -60,8 +62,8 @@ def bump_version(version_file: str, version_spec: str):
 
     # Stable Release
     if version_spec == "patch":
-        alpha = None
-        patch = int(patch) + 1
+        if not was_alpha:
+            patch = int(patch) + 1
     elif version_spec == "minor":
         patch = 0
         minor = int(minor) + 1
