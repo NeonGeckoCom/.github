@@ -124,10 +124,12 @@ jobs:
           packages_dir: action/package/dist/
           password: ${{secrets.PYPI_TOKEN}}
   tag_prerelease:
-    if: ${{inputs.publish_prerelease}}
     needs:
       - update_changelog
       - bump_version
+    if: |
+      ${{inputs.publish_prerelease}} &&
+      (needs.update_changelog.result == 'success' || needs.update_changelog.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
