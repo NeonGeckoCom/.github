@@ -24,8 +24,6 @@ jobs:
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
-          ref: FEAT_VersionActions
-          # TODO: Remove branch ref
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
