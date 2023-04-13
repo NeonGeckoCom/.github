@@ -128,7 +128,7 @@ jobs:
       - update_changelog
       - bump_version
     if: |
-      ${{inputs.publish_prerelease}} &&
+      always() && ${{inputs.publish_prerelease}} &&
       (needs.update_changelog.result == 'success' || needs.update_changelog.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
