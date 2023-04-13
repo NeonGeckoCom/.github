@@ -20,7 +20,7 @@ on:
         value: ${{jobs.bump_version.outputs.version}}
       changelog:
         description: Changelog Contents
-        value: ${{jobs.update_changelog.outputs.changelog}}
+        value: action/package/${{jobs.update_changelog.outputs.changelog}}
 jobs:
   update_changelog:
     runs-on: ubuntu-latest
@@ -46,6 +46,8 @@ jobs:
           commit_message: Update Changelog
           repository: action/package/
   bump_version:
+    needs: update_changelog
+    if: ${{ always }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
