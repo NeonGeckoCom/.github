@@ -20,11 +20,41 @@ on:
       version_scheme:
         type: string
         default: semver
+      update_changelog:
+        type: boolean
+        default: false
+      changelog_file:
+        type: string
+        default: "CHANGELOG.md"
     outputs:
       version:
         description: Updated Alpha version
-        value: ${{jobs.build_and_publish_pypi.outputs.version}}
+        value: ${{jobs.bump_version.outputs.version}}
+      changelog: Changelog Contents
+      value: ${{jobs.update_changelog.outputs.changelog}}
 jobs:
+  update_changelog:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.update_changelog }}
+    outputs:
+      changelog: ${{ steps.changelog.outputs.changelog }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.branch }}
+          path: action/package/
+      - name: Generate Changelog
+        id: changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          output: ${{ inputs.changelog_file }}
+      - name: Push Changelog
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update Changelog
+          repository: action/package/
   bump_version:
     runs-on: ubuntu-latest
     outputs:
