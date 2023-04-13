@@ -24,32 +24,7 @@ on:
         description: Changelog Contents
         value: ${{jobs.update_changelog.outputs.changelog}}
 jobs:
-  update_changelog:
-    runs-on: ubuntu-latest
-    if: ${{ inputs.update_changelog }}
-    outputs:
-      changelog: ${{ steps.changelog.outputs.changelog }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ inputs.branch }}
-          path: action/package/
-      - name: Generate Changelog
-        id: changelog
-        if: include_changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          output: action/package/${{ inputs.changelog_file }}
-      - name: Push Changelog
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Update Changelog
-          repository: action/package/
   bump_version:
-    needs: update_changelog
-    if: ${{ always() }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -77,4 +52,28 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Increment Version to ${{ steps.version.outputs.version }}
+          repository: action/package/
+  update_changelog:
+    needs: bump_version
+    runs-on: ubuntu-latest
+    if: ${{ inputs.update_changelog }}
+    outputs:
+      changelog: ${{ steps.changelog.outputs.changelog }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.branch }}
+          path: action/package/
+      - name: Generate Changelog
+        id: changelog
+        if: include_changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          output: action/package/${{ inputs.changelog_file }}
+      - name: Push Changelog
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update Changelog
           repository: action/package/
