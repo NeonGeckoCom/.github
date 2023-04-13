@@ -127,9 +127,7 @@ jobs:
     needs:
       - update_changelog
       - bump_version
-    if: |
-      always() && ${{inputs.publish_prerelease}} &&
-      (needs.update_changelog.result == 'success' || needs.update_changelog.result == 'skipped')
+    if: ${{ always() && inputs.publish_prerelease }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
