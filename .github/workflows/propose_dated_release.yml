@@ -18,8 +18,9 @@ on:
       version:
         description: Updated version
         value: ${{jobs.bump_version.outputs.version}}
-      changelog: Changelog Contents
-      value: ${{jobs.update_changelog.outputs.changelog}}
+      changelog:
+        description: Changelog Contents
+        value: ${{jobs.update_changelog.outputs.changelog}}
 jobs:
   update_changelog:
     runs-on: ubuntu-latest
