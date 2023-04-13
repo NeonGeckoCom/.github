@@ -49,7 +49,7 @@ jobs:
           repository: action/package/
   bump_version:
     needs: update_changelog
-    if: ${{ always }}
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
