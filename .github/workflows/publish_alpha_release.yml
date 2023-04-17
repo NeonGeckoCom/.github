@@ -87,7 +87,7 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: ${{ github.repository }}
-          excludes: draft, prerelease
+          excludes: draft,prerelease
       - name: Generate Changelog
         id: changelog
         uses: heinrichreimer/github-changelog-generator-action@v2.3
