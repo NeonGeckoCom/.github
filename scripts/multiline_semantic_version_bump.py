@@ -86,11 +86,6 @@ def bump_version(version_file: str, version_spec: str):
 
 
 if __name__ == "__main__":
-    # global alpha_var
-    # global build_var
-    # global minor_var
-    # global major_var
-
     file = argv[1]
     version_spec = argv[2]
     if len(argv) > 2:
