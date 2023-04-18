@@ -57,12 +57,15 @@ def bump_version(version_file: str, version_spec: str):
         if alpha == 0:
             build += 1
         alpha += 1
+        was_alpha = False  # Just for editor warnings, this won't be referenced
     else:
+        was_alpha = alpha != 0
         alpha = 0
 
     # Stable Release
     if version_spec == "build":
-        build += 1
+        if not was_alpha:
+            build += 1
     elif version_spec == "minor":
         build = 0
         minor += 1
