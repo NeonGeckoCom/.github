@@ -55,7 +55,7 @@ def bump_version(version_file: str, version_spec: str):
     # Alpha Release
     if version_spec == "alpha":
         if alpha == 0:
-            minor += 1
+            build += 1
         alpha += 1
     else:
         alpha = 0
