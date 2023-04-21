@@ -32,14 +32,10 @@ jobs:
           python -m pip install build wheel
       - name: Build Distribution Packages
         run: |
-          cd action/package
-          python setup.py bdist_wheel sdist
+          python action/package/setup.py bdist_wheel sdist
       - name: Test Manifest
         if: ${{ inputs.test_manifest }}
         uses: tj-actions/check-manifest@v1
         with:
+          package-dir: action/package
           args: --ignore ${{ inputs.manifest_ignored }}
-      - name: Test Build Relative Paths
-        run: |
-          cd ../
-          python package/setup.py bdist_wheel sdist
