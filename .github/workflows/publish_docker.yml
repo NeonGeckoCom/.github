@@ -88,7 +88,7 @@ jobs:
       - name: Extract metadata for extra Docker
         if: "${{ inputs.extra_tag != '' }}"
         id: extra_meta
-        uses: docker/metadata-action@v2
+        uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ inputs.extra_tag }}
           tags: |
