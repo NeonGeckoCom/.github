@@ -71,6 +71,9 @@ jobs:
         with:
           platforms: ${{ inputs.platforms }}
 
+      - name: Troubleshooting step
+        run: docker buildx ls
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
