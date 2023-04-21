@@ -22,6 +22,7 @@ on:
 env:
   REGISTRY: ${{ inputs.registry }}
   IMAGE_NAME: ${{ inputs.image_name }}
+  BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
 jobs:
   build_and_publish_docker:
