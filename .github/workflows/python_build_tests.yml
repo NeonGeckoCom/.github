@@ -19,7 +19,10 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          path: action/package/
       - name: Set up python ${{ inputs.python_version }}
         uses: actions/setup-python@v2
         with:
@@ -29,9 +32,14 @@ jobs:
           python -m pip install build wheel
       - name: Build Distribution Packages
         run: |
+          cd action/package
           python setup.py bdist_wheel sdist
       - name: Test Manifest
         if: ${{ inputs.test_manifest }}
         uses: tj-actions/check-manifest@v1
         with:
           args: --ignore ${{ inputs.manifest_ignored }}
+      - name: Test Build Relative Paths
+        run: |
+          cd ../
+          python package/setup.py bdist_wheel sdist
