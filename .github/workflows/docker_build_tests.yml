@@ -8,7 +8,7 @@ on:
 jobs:
   docker_build_tests:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Install extra dependencies
         if: "${{ inputs.apt_extras != '' }}"
