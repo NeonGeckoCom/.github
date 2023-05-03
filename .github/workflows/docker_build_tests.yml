@@ -1,11 +1,20 @@
 name: Docker Build Tests
 on:
   workflow_call:
+    inputs:
+      apt_extras:
+        type: string
+        required: false
 jobs:
   docker_build_tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Install extra dependencies
+        if: "${{ inputs.apt_extras != '' }}"
+        run: |
+          sudo apt update && sudo apt install ${{ inputs.apt_extras }}
+      - name: Checkout Repository
+        uses: actions/checkout@v2
       - name: Build image
         run: docker build .

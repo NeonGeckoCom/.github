@@ -14,6 +14,9 @@ on:
       image_name:
         type: string
         default: ${{ github.repository }}
+      apt_extras:
+        type: string
+        required: false
 
 env:
   REGISTRY: ${{ inputs.registry }}
@@ -28,6 +31,10 @@ jobs:
       contents: read
       packages: write
     steps:
+      - name: Install extra dependencies
+        if: "${{ inputs.apt_extras != '' }}"
+        run: |
+          sudo apt update && sudo apt install ${{ inputs.apt_extras }}
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
