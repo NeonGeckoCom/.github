@@ -24,6 +24,8 @@ jobs:
         with:
           repository: NeonGeckoCom/.github
           path: action/github/
+          ref: FIX_AllowFailingOSMTests
+          # TODO: Remove `ref` spec
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
