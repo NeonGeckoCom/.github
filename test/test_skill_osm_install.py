@@ -27,7 +27,7 @@
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
-import pytest.mark
+import pytest
 
 from os import environ
 from os.path import exists, isdir, isfile, join
