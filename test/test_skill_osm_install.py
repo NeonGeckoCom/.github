@@ -38,7 +38,7 @@ from ovos_skills_manager import SkillEntry
 
 class TestOSM(unittest.TestCase):
     # TODO: Remove with next OSM release or deprecate test
-    @pytest.mark.xfail(reason="OSM Dependency Bug with `requests`")
+    @pytest.mark.skip(reason="OSM Dependency Bug with `requests`")
     def test_osm_install(self):
         branch = environ.get("TEST_BRANCH")
         install_url = f"https://github.com/{environ.get('TEST_REPO')}@{branch}"
