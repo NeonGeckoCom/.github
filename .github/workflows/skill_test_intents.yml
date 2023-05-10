@@ -45,13 +45,15 @@ jobs:
           pip install pytest mock ovos-core[skills-lgpl] action/skill/
       - name: Test Skill Intents Padacioso
         run: |
+          export INTENT_ENGINE="padacioso"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
-          pytest action/github/test/test_skill_intents.py padacioso
+          pytest action/github/test/test_skill_intents.py
       - name: Test Skill Intents Padatious
         if: ${{ inputs.test_padatious }}
         run: |
+          export INTENT_ENGINE="padatious"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
-          pytest action/github/test/test_skill_intents.py padatious
+          pytest action/github/test/test_skill_intents.py
   test_intents_neon:
     runs-on: ${{inputs.runner}}
     timeout-minutes: ${{inputs.timeout}}
@@ -80,10 +82,12 @@ jobs:
           pip install pytest mock git+https://github.com/NeonGeckoCom/NeonCore#egg=neon_core action/skill/
       - name: Test Skill Intents Padacioso
         run: |
+          export INTENT_ENGINE="padacioso"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
-          pytest action/github/test/test_skill_intents.py padacioso
+          pytest action/github/test/test_skill_intents.py
       - name: Test Skill Intents Padatious
         if: ${{ inputs.test_padatious }}
         run: |
+          export INTENT_ENGINE="padatious"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
-          pytest action/github/test/test_skill_intents.py padatious
+          pytest action/github/test/test_skill_intents.py

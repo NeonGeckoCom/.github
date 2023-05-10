@@ -30,7 +30,6 @@ import unittest
 import yaml
 import logging
 
-from sys import argv
 from os import getenv
 from mock import Mock, patch
 from ovos_utils.messagebus import FakeBus
@@ -41,7 +40,7 @@ from ovos_utils.log import LOG
 from mycroft.skills.intent_services.padatious_service import PadatiousMatcher
 
 LOG.level = logging.DEBUG
-regex_only = False
+regex_only = getenv("INTENT_ENGINE") == "padacioso"
 
 
 class MockPadatiousMatcher(PadatiousMatcher):
@@ -208,10 +207,6 @@ class TestSkillIntentMatching(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    global regex_only
-    regex_only = False
-    if argv[1] == "padacioso":
-        regex_only = True
     from ovos_config.config import update_mycroft_config
     update_mycroft_config({"padatious": {"regex_only": regex_only}})
     unittest.main()
