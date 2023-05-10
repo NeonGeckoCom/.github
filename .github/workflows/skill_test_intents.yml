@@ -14,6 +14,9 @@ on:
       test_padatious:
         type: boolean
         default: False
+      test_padacioso:
+        type: boolean
+        default: True
 jobs:
   test_intents_ovos:
     runs-on: ${{inputs.runner}}
@@ -44,6 +47,7 @@ jobs:
           pip install --upgrade pip
           pip install pytest mock ovos-core[skills,skills-lgpl] action/skill/
       - name: Test Skill Intents Padacioso
+        if: ${{ inputs.test_padacioso }}
         run: |
           export INTENT_ENGINE="padacioso"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
@@ -81,6 +85,7 @@ jobs:
           pip install --upgrade pip
           pip install pytest mock git+https://github.com/NeonGeckoCom/NeonCore#egg=neon_core action/skill/
       - name: Test Skill Intents Padacioso
+        if: ${{ inputs.test_padacioso }}
         run: |
           export INTENT_ENGINE="padacioso"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
