@@ -10,7 +10,7 @@ on:
         default: test/test_intents.yaml
       timeout:
         type: number
-        default: 10
+        default: 15
       test_padatious:
         type: boolean
         default: False

@@ -32,18 +32,18 @@ import logging
 
 from os import getenv
 from mock import Mock, patch
-from ovos_utils.messagebus import FakeBus
 from mycroft_bus_client import Message
-from ovos_plugin_manager.skills import load_skill_plugins
-from ovos_utils.log import LOG
 
-
-LOG.level = logging.DEBUG
 regex_only = getenv("INTENT_ENGINE") == "padacioso"
 from ovos_config.config import update_mycroft_config
 update_mycroft_config({"padatious": {"regex_only": regex_only}})
 
+from ovos_utils.messagebus import FakeBus
+from ovos_plugin_manager.skills import load_skill_plugins
+from ovos_utils.log import LOG
 from mycroft.skills.intent_services.padatious_service import PadatiousMatcher
+
+LOG.level = logging.DEBUG
 
 
 class MockPadatiousMatcher(PadatiousMatcher):
