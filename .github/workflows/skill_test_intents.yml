@@ -11,6 +11,9 @@ on:
       timeout:
         type: number
         default: 10
+      test_padatious:
+        type: boolean
+        default: False
 jobs:
   test_intents_ovos:
     runs-on: ${{inputs.runner}}
@@ -37,11 +40,16 @@ jobs:
           sudo apt update
           sudo apt install -y gcc libfann-dev swig libssl-dev portaudio19-dev git libpulse-dev
           pip install --upgrade pip
-          pip install pytest mock ovos-core[skills] action/skill/
-      - name: Test Skill Intents
+          pip install pytest mock ovos-core[skills-lgpl] action/skill/
+      - name: Test Skill Intents Padacioso
         run: |
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
-          pytest action/github/test/test_skill_intents.py
+          pytest action/github/test/test_skill_intents.py padacioso
+      - name: Test Skill Intents Padatious
+        if: ${{ inputs.test_padatious }}
+        run: |
+          export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
+          pytest action/github/test/test_skill_intents.py padatious
   test_intents_neon:
     runs-on: ${{inputs.runner}}
     timeout-minutes: ${{inputs.timeout}}
@@ -68,7 +76,12 @@ jobs:
           sudo apt install -y gcc libfann-dev swig libssl-dev portaudio19-dev git libpulse-dev
           pip install --upgrade pip
           pip install pytest mock git+https://github.com/NeonGeckoCom/NeonCore#egg=neon_core action/skill/
-      - name: Test Skill Intents
+      - name: Test Skill Intents Padacioso
         run: |
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
-          pytest action/github/test/test_skill_intents.py
+          pytest action/github/test/test_skill_intents.py padacioso
+      - name: Test Skill Intents Padatious
+        if: ${{ inputs.test_padatious }}
+        run: |
+          export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
+          pytest action/github/test/test_skill_intents.py padatious
