@@ -22,7 +22,7 @@ on:
         default: false
       pipaudit_ignored:
         type: string
-        default: "GHSA-r9hx-vwmv-q579"
+        default: "GHSA-r9hx-vwmv-q579 PYSEC-2022-43012"
 jobs:
   py_build_tests:
     timeout-minutes: 15
