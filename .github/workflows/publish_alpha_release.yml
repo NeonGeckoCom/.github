@@ -1,6 +1,10 @@
 name: Publish Alpha Build
 on:
   workflow_call:
+    secrets:
+      PYPI_TOKEN:
+        required: false
+        type: string
     inputs:
       runner:
         type: string
