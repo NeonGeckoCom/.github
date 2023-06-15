@@ -5,9 +5,6 @@ on:
       PYPI_TOKEN:
         required: false
         type: string
-      GITHUB_TOKEN:
-        requred: true
-        type: string
     inputs:
       runner:
         type: string
