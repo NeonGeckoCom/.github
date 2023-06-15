@@ -4,7 +4,6 @@ on:
     secrets:
       PYPI_TOKEN:
         required: true
-        type: string
     inputs:
       runner:
         type: string
