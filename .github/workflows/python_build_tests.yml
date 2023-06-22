@@ -50,10 +50,10 @@ jobs:
         uses: pypa/gh-action-pip-audit@v1.0.7
         with:
           ignore-vulns: ${{ inputs.pipaudit_ignored }}
-      - name: Checkout Repository to /tmp/package
+      - name: Checkout Repository to build_test
         uses: actions/checkout@v2
         with:
-          path: /tmp/package
+          path: build_test
       - name: Build Distribution Packages
         run: |
-          python /tmp/package/setup.py bdist_wheel sdist || echo "::error setup.py:: Are there relative paths in setup.py?"
+          python build_test/setup.py bdist_wheel sdist || echo "::error setup.py:: Are there relative paths in setup.py?"
