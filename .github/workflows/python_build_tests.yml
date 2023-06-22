@@ -28,7 +28,8 @@ jobs:
     timeout-minutes: 15
     runs-on: ${{inputs.runner}}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
       - name: Set up python ${{ inputs.python_version }}
         uses: actions/setup-python@v2
         with:
@@ -49,3 +50,9 @@ jobs:
         uses: pypa/gh-action-pip-audit@v1.0.7
         with:
           ignore-vulns: ${{ inputs.pipaudit_ignored }}
+      - name: Checkout Repository to /tmp/package
+        uses: actions/checkout@v2
+        path: /tmp/package
+      - name: Build Distribution Packages
+        run: |
+          python /tmp/package/setup.py bdist_wheel sdist || echo "::error setup.py:: Are there relative paths in setup.py?"
