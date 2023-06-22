@@ -20,6 +20,9 @@ on:
       test_pipaudit:
         type: boolean
         default: false
+      test_relative_paths:
+        type: boolean
+        default: true
       pipaudit_ignored:
         type: string
         default: "GHSA-r9hx-vwmv-q579 PYSEC-2022-43012"
@@ -53,6 +56,7 @@ jobs:
   relative_path_tests:
     timeout-minutes: 15
     runs-on: ${{inputs.runner}}
+    if: ${{ inputs.test_relative_paths }}
     steps:
       - name: Checkout Repository to build_test
         uses: actions/checkout@v2
