@@ -50,7 +50,7 @@ jobs:
         uses: pypa/gh-action-pip-audit@v1.0.7
         with:
           ignore-vulns: ${{ inputs.pipaudit_ignored }}
-  relative_path_build_tests:
+  relative_path_tests:
     timeout-minutes: 15
     runs-on: ${{inputs.runner}}
     steps:
