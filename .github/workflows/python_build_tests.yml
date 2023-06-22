@@ -72,4 +72,3 @@ jobs:
       - name: Build Distribution Packages
         run: |
           python build_test/setup.py bdist_wheel sdist || echo "::error setup.py:: Are there relative paths in setup.py?"
-          python build_test/setup.py --version
