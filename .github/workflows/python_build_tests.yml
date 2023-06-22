@@ -52,7 +52,8 @@ jobs:
           ignore-vulns: ${{ inputs.pipaudit_ignored }}
       - name: Checkout Repository to /tmp/package
         uses: actions/checkout@v2
-        path: /tmp/package
+        with:
+          path: /tmp/package
       - name: Build Distribution Packages
         run: |
           python /tmp/package/setup.py bdist_wheel sdist || echo "::error setup.py:: Are there relative paths in setup.py?"
