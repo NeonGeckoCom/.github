@@ -79,6 +79,7 @@ class TestSkillIntentMatching(unittest.TestCase):
     skills = load_skill_plugins()
     assert len(skills) == 1
     skill = skills[0]
+    skill.config_core["secondary_langs"] = list(valid_intents.keys())
 
     from mycroft.skills.intent_service import IntentService
     bus = FakeBus()
