@@ -33,6 +33,7 @@ import logging
 from os import getenv
 from mock import Mock, patch
 from mycroft_bus_client import Message
+from ovos_config.config import update_mycroft_config
 from ovos_utils.messagebus import FakeBus
 from ovos_plugin_manager.skills import load_skill_plugins
 from ovos_utils.log import LOG
@@ -64,17 +65,21 @@ class MockPadatiousMatcher(PadatiousMatcher):
 
 
 class TestSkillIntentMatching(unittest.TestCase):
+    test_intents = getenv("INTENT_TEST_FILE")
+    with open(test_intents) as f:
+        valid_intents = yaml.safe_load(f)
+    negative_intents = valid_intents.pop('unmatched intents', dict())
+    common_query = valid_intents.pop("common query", dict())
+
+    # Ensure all tested languages are loaded
+    update_mycroft_config({"secondary_langs": valid_intents.keys()})
+
     # TODO: Refactor after stable ovos-workshop release to use a
     #       `PluginSkillLoader` object directly here
     skills = load_skill_plugins()
     assert len(skills) == 1
     skill = skills[0]
 
-    test_intents = getenv("INTENT_TEST_FILE")
-    with open(test_intents) as f:
-        valid_intents = yaml.safe_load(f)
-    negative_intents = valid_intents.pop('unmatched intents', dict())
-    common_query = valid_intents.pop("common query", dict())
     from mycroft.skills.intent_service import IntentService
     bus = FakeBus()
     intent_service = IntentService(bus)
@@ -86,8 +91,6 @@ class TestSkillIntentMatching(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.skill._startup(cls.bus, cls.test_skill_id)
-        cls.skill.config_core["secondary_langs"] = list(cls.valid_intents.keys())
-        cls.skill.load_data_files()
 
         def _on_message(msg):
             cls.last_message = msg
@@ -97,6 +100,10 @@ class TestSkillIntentMatching(unittest.TestCase):
     def test_00_init(self):
         for lang in self.valid_intents.keys():
             self.assertIn(lang, self.skill._native_langs, lang)
+            self.assertIn(lang,
+                          self.intent_service.padatious_service.containers)
+            self.assertIn(lang,
+                          self.intent_service.adapt_service.engines)
 
     def test_intents(self):
         for lang in self.valid_intents.keys():
@@ -119,7 +126,8 @@ class TestSkillIntentMatching(unittest.TestCase):
                     try:
                         intent_handler.assert_called_once()
                     except AssertionError as e:
-                        LOG.error(self.last_message)
+                        LOG.error(f"sent:{message}")
+                        LOG.error(f"received:{self.last_message}")
                         raise AssertionError(utt) from e
                     intent_message = intent_handler.call_args[0][0]
                     self.assertIsInstance(intent_message, Message, utt)
