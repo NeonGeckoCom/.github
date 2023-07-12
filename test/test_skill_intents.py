@@ -72,7 +72,7 @@ class TestSkillIntentMatching(unittest.TestCase):
     common_query = valid_intents.pop("common query", dict())
 
     # Ensure all tested languages are loaded
-    update_mycroft_config({"secondary_langs": valid_intents.keys()})
+    update_mycroft_config({"secondary_langs": list(valid_intents.keys())})
 
     # TODO: Refactor after stable ovos-workshop release to use a
     #       `PluginSkillLoader` object directly here
