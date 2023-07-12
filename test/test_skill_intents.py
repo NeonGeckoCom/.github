@@ -127,7 +127,7 @@ class TestSkillIntentMatching(unittest.TestCase):
                     try:
                         intent_handler.assert_called_once()
                     except AssertionError as e:
-                        LOG.error(f"sent:{message}")
+                        LOG.error(f"sent:{message.serialize()}")
                         LOG.error(f"received:{self.last_message}")
                         raise AssertionError(utt) from e
                     intent_message = intent_handler.call_args[0][0]
