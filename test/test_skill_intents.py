@@ -103,8 +103,20 @@ class TestSkillIntentMatching(unittest.TestCase):
             self.assertIn(lang, self.skill._native_langs, lang)
             self.assertIn(lang,
                           self.intent_service.padatious_service.containers)
+            self.assertEqual(len(self.intent_service.padatious_service.
+                                 containers[lang].intents.keys()),
+                             len(self.intent_service.padatious_service.
+                                 containers["en-us"].intents.keys()),
+                             self.intent_service.padatious_service.
+                             containers[lang].intents.keys())
             self.assertIn(lang,
                           self.intent_service.adapt_service.engines)
+            self.assertEqual(len(self.intent_service.adapt_service.
+                                 engines[lang].intent_parsers),
+                             len(self.intent_service.adapt_service.
+                                 engines["en-us"].intent_parsers),
+                             self.intent_service.adapt_service.
+                             engines[lang].intent_parsers)
 
     def test_intents(self):
         for lang in self.valid_intents.keys():
