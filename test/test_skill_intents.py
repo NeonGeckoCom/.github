@@ -84,7 +84,8 @@ class TestSkillIntentMatching(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.skill.config_core["secondary_langs"] = list(cls.valid_intents.keys())
-        cls.skill._startup(cls.bus, cls.test_skill_id)
+        cls.skill._startup(cls.bus, cls.test_skill_id)  # TODO: Deprecate
+        cls.skill.load_data_files()
 
         def _on_message(msg):
             cls.last_message = msg

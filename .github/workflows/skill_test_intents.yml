@@ -34,6 +34,8 @@ jobs:
         with:
           repository: NeonGeckoCom/.github
           path: action/github/
+          ref: FIX_SecondaryLanguageIntentTests
+          # TODO: Remove ref
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -74,6 +76,8 @@ jobs:
         with:
           repository: NeonGeckoCom/.github
           path: action/github/
+          ref: FIX_SecondaryLanguageIntentTests
+          # TODO: Remove ref
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
