@@ -64,6 +64,8 @@ class MockPadatiousMatcher(PadatiousMatcher):
 
 
 class TestSkillIntentMatching(unittest.TestCase):
+    # TODO: Refactor after stable ovos-workshop release to use a
+    #       `PluginSkillLoader` object directly here
     skills = load_skill_plugins()
     assert len(skills) == 1
     skill = skills[0]
@@ -83,6 +85,7 @@ class TestSkillIntentMatching(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        cls.skill._startup(cls.bus, cls.test_skill_id)
         cls.skill.config_core["secondary_langs"] = list(cls.valid_intents.keys())
         cls.skill.load_data_files()
 
