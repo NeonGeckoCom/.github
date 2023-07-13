@@ -26,6 +26,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import importlib
 import unittest
 import yaml
 import logging
@@ -35,7 +36,6 @@ from mock import Mock, patch
 from mycroft_bus_client import Message
 from ovos_config.config import update_mycroft_config
 from ovos_utils.messagebus import FakeBus
-from ovos_plugin_manager.skills import load_skill_plugins
 from ovos_utils.log import LOG
 from mycroft.skills.intent_services.padatious_service import PadatiousMatcher
 
@@ -64,6 +64,18 @@ class MockPadatiousMatcher(PadatiousMatcher):
         PadatiousMatcher.match_low(self, utterances, lang=lang)
 
 
+def get_skill_class():
+    from ovos_plugin_manager.skills import find_skill_plugins
+    plugins = find_skill_plugins()
+    plugin_id = getenv("TEST_SKILL_ID")
+    if plugin_id:
+        skill = plugins.get(plugin_id)
+    else:
+        assert len(plugins.values()) == 1
+        skill = list(plugins.values())[0]
+    return skill
+
+
 class TestSkillIntentMatching(unittest.TestCase):
     test_intents = getenv("INTENT_TEST_FILE")
     with open(test_intents) as f:
@@ -72,47 +84,50 @@ class TestSkillIntentMatching(unittest.TestCase):
     common_query = valid_intents.pop("common query", dict())
 
     # Ensure all tested languages are loaded
-    update_mycroft_config({"secondary_langs": list(valid_intents.keys())})
+    import ovos_config
+    update_mycroft_config({"secondary_langs": list(valid_intents.keys()),
+                           "padatious": {"regex_only": regex_only}})
+    importlib.reload(ovos_config.config)
 
-    # TODO: Refactor after stable ovos-workshop release to use a
-    #       `PluginSkillLoader` object directly here
-    skills = load_skill_plugins()
-    assert len(skills) == 1
-    skill = skills[0]
-    skill.config_core["secondary_langs"] = list(valid_intents.keys())
-
-    from mycroft.skills.intent_service import IntentService
+    # Start the IntentService
     bus = FakeBus()
+    from mycroft.skills.intent_service import IntentService
     intent_service = IntentService(bus)
-    intent_service.padatious_service.padatious_config['regex_only'] = regex_only
     assert intent_service.padatious_service.is_regex_only == regex_only
+
+    # Create the skill to test
+    # TODO: Refactor to use ovos-workshop
+    skill_class = get_skill_class()
     test_skill_id = 'test_skill.test'
+    skill = skill_class(skill_id=test_skill_id, bus=bus)
+    assert skill.config_core["secondary_langs"] == list(valid_intents.keys())
+
     last_message = None
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.skill._startup(cls.bus, cls.test_skill_id)
-
         def _on_message(msg):
             cls.last_message = msg
 
         cls.bus.on("message", _on_message)
 
     def test_00_init(self):
-        for lang in self.valid_intents.keys():
+        for lang in self.valid_intents:
             self.assertIn(lang, self.skill._native_langs, lang)
             self.assertIn(lang,
                           self.intent_service.padatious_service.containers)
-            if regex_only:
-                intents = self.intent_service.padatious_service.containers[lang]
-                LOG.info(f"Padatious {lang}: {intents.keys()}")
-            self.assertIn(lang,
-                          self.intent_service.adapt_service.engines)
-            engine = self.intent_service.adapt_service.engines[lang]
-            LOG.info(f"Adapt {lang}: {engine.intent_parsers}")
+            intents = [intent[1]['name'] for intent in
+                       self.skill.intent_service.registered_intents if
+                       intent[1]['lang'] == lang]
+            LOG.info(f"{lang} intents: {intents}")
+            self.assertIsNotNone(intents, f"No intents registered for {lang}")
+            for intent in self.valid_intents[lang]:
+                # Validate IntentServiceInterface registration
+                self.assertIn(f"{self.test_skill_id}:{intent}", intents,
+                              f"Intent not defined for {lang}")
 
     def test_intents(self):
-        for lang in self.valid_intents.keys():
+        for lang in self.valid_intents:
             self.assertIsInstance(lang.split('-')[0], str)
             self.assertIsInstance(lang.split('-')[1], str)
             for intent, examples in self.valid_intents[lang].items():
@@ -170,6 +185,13 @@ class TestSkillIntentMatching(unittest.TestCase):
                                                                False)
         intent_failure = Mock()
         self.intent_service.send_complete_intent_failure = intent_failure
+
+        # Skip any fallback/converse handling
+        self.intent_service.fallback = Mock()
+        self.intent_service.converse = Mock()
+        if not self.common_query:
+            # Skip common_qa unless explicitly testing a Common QA skill
+            self.intent_service.common_qa = Mock()
 
         for lang in self.negative_intents.keys():
             for utt in self.negative_intents[lang]:
