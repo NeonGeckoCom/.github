@@ -35,14 +35,19 @@ from os import getenv
 from ovos_utils.messagebus import FakeBus
 
 
-def get_skill_class():
+def get_skill_object(bus, skill_id):
     from ovos_plugin_manager.skills import find_skill_plugins
+    from ovos_workshop.skill_launcher import PluginSkillLoader
     plugins = find_skill_plugins()
     skill = getenv("TEST_SKILL_ID")
     if skill and skill in plugins:
-        return plugins.get(skill)
-    assert len(plugins) == 1
-    return list(plugins.values())[0]
+        clazz = plugins.get(skill)
+    else:
+        assert len(plugins) == 1
+        clazz = list(plugins.values())[0]
+    skill = PluginSkillLoader(bus, skill_id)
+    assert skill.load(clazz) is True
+    return skill.instance
 
 
 class TestSkillLoading(unittest.TestCase):
@@ -52,7 +57,7 @@ class TestSkillLoading(unittest.TestCase):
     """
     bus = FakeBus()
     test_skill_id = 'test_skill.test'
-    skill = get_skill_class()(bus=bus, skill_id=test_skill_id)
+    skill = get_skill_object(bus=bus, skill_id=test_skill_id)
 
     test_resources = getenv("RESOURCE_TEST_FILE")
     with open(test_resources) as f:

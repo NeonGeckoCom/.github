@@ -41,14 +41,19 @@ regex_only = getenv("INTENT_ENGINE") == "padacioso"
 LOG.level = logging.DEBUG
 
 
-def get_skill_class():
+def get_skill_object(bus, skill_id):
     from ovos_plugin_manager.skills import find_skill_plugins
+    from ovos_workshop.skill_launcher import PluginSkillLoader
     plugins = find_skill_plugins()
     skill = getenv("TEST_SKILL_ID")
     if skill and skill in plugins:
-        return plugins.get(skill)
-    assert len(plugins) == 1
-    return list(plugins.values())[0]
+        clazz = plugins.get(skill)
+    else:
+        assert len(plugins) == 1
+        clazz = list(plugins.values())[0]
+    skill = PluginSkillLoader(bus, skill_id)
+    assert skill.load(clazz) is True
+    return skill.instance
 
 
 class MockPadatiousMatcher(PadatiousMatcher):
@@ -75,7 +80,7 @@ class MockPadatiousMatcher(PadatiousMatcher):
 class TestSkillIntentMatching(unittest.TestCase):
     bus = FakeBus()
     test_skill_id = 'test_skill.test'
-    skill = get_skill_class()(skill_id=test_skill_id, bus=bus)
+    skill = get_skill_object(skill_id=test_skill_id, bus=bus)
 
     test_intents = getenv("INTENT_TEST_FILE")
     with open(test_intents) as f:
