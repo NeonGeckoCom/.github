@@ -34,12 +34,21 @@ from os import getenv
 from mock import Mock, patch
 from mycroft_bus_client import Message
 from ovos_utils.messagebus import FakeBus
-from ovos_plugin_manager.skills import load_skill_plugins
 from ovos_utils.log import LOG
 from mycroft.skills.intent_services.padatious_service import PadatiousMatcher
 
 regex_only = getenv("INTENT_ENGINE") == "padacioso"
 LOG.level = logging.DEBUG
+
+
+def get_skill_class():
+    from ovos_plugin_manager.skills import find_skill_plugins
+    plugins = find_skill_plugins()
+    skill = getenv("TEST_SKILL_ID")
+    if skill and skill in plugins:
+        return plugins.get(skill)
+    assert len(plugins) == 1
+    return list(plugins.values())[0]
 
 
 class MockPadatiousMatcher(PadatiousMatcher):
@@ -66,9 +75,7 @@ class MockPadatiousMatcher(PadatiousMatcher):
 class TestSkillIntentMatching(unittest.TestCase):
     bus = FakeBus()
     test_skill_id = 'test_skill.test'
-    skills = load_skill_plugins(skill_id=test_skill_id, bus=bus)
-    assert len(skills) == 1
-    skill = skills[0]
+    skill = get_skill_class()(skill_id=test_skill_id, bus=bus)
 
     test_intents = getenv("INTENT_TEST_FILE")
     with open(test_intents) as f:
