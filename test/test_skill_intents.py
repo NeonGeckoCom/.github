@@ -43,7 +43,6 @@ LOG.level = logging.DEBUG
 
 def get_skill_object(bus, skill_id):
     from ovos_plugin_manager.skills import find_skill_plugins
-    from ovos_workshop.skill_launcher import PluginSkillLoader
     plugins = find_skill_plugins()
     skill = getenv("TEST_SKILL_ID")
     if skill and skill in plugins:
@@ -51,9 +50,8 @@ def get_skill_object(bus, skill_id):
     else:
         assert len(plugins) == 1
         clazz = list(plugins.values())[0]
-    skill = PluginSkillLoader(bus, skill_id)
-    assert skill.load(clazz) is True
-    return skill.instance
+    skill = clazz(bus=bus, skill_id=skill_id)
+    return skill
 
 
 class MockPadatiousMatcher(PadatiousMatcher):
@@ -79,6 +77,7 @@ class MockPadatiousMatcher(PadatiousMatcher):
 
 class TestSkillIntentMatching(unittest.TestCase):
     bus = FakeBus()
+    bus.run_forever()
     test_skill_id = 'test_skill.test'
     skill = get_skill_object(skill_id=test_skill_id, bus=bus)
 
@@ -108,7 +107,8 @@ class TestSkillIntentMatching(unittest.TestCase):
             self.assertIsInstance(lang.split('-')[1], str)
             for intent, examples in self.valid_intents[lang].items():
                 intent_event = f'{self.test_skill_id}:{intent}'
-                self.skill.events.remove(intent_event)
+                self.assertTrue(self.skill.events.remove(intent_event),
+                                f"event not registered: {intent_event}")
                 intent_handler = Mock()
                 self.skill.events.add(intent_event, intent_handler)
                 for utt in examples:
