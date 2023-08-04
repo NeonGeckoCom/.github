@@ -64,7 +64,9 @@ class MockPadatiousMatcher(PadatiousMatcher):
 
 
 class TestSkillIntentMatching(unittest.TestCase):
-    skills = load_skill_plugins()
+    bus = FakeBus()
+    test_skill_id = 'test_skill.test'
+    skills = load_skill_plugins(skill_id=test_skill_id, bus=bus)
     assert len(skills) == 1
     skill = skills[0]
 
@@ -74,18 +76,15 @@ class TestSkillIntentMatching(unittest.TestCase):
     negative_intents = valid_intents.pop('unmatched intents', dict())
     common_query = valid_intents.pop("common query", dict())
     from mycroft.skills.intent_service import IntentService
-    bus = FakeBus()
     intent_service = IntentService(bus)
     intent_service.padatious_service.padatious_config['regex_only'] = regex_only
     assert intent_service.padatious_service.is_regex_only == regex_only
-    test_skill_id = 'test_skill.test'
     last_message = None
+
+    skill.config_core["secondary_langs"] = list(valid_intents.keys())
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.skill.config_core["secondary_langs"] = list(cls.valid_intents.keys())
-        cls.skill._startup(cls.bus, cls.test_skill_id)
-
         def _on_message(msg):
             cls.last_message = msg
 

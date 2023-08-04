@@ -41,7 +41,9 @@ class TestSkillLoading(unittest.TestCase):
     Test skill loading, intent registration, and langauge support. Test cases
     are generic, only class variables should be modified per-skill.
     """
-    skills = load_skill_plugins()
+    bus = FakeBus()
+    test_skill_id = 'test_skill.test'
+    skills = load_skill_plugins(bus=bus, skill_id=test_skill_id)
     assert len(skills) == 1
 
     test_resources = getenv("RESOURCE_TEST_FILE")
@@ -50,9 +52,7 @@ class TestSkillLoading(unittest.TestCase):
 
     # Static parameters
     skill = skills[0]
-    bus = FakeBus()
     messages = list()
-    test_skill_id = 'test_skill.test'
     # Default Core Events
     default_events = ["mycroft.skill.enable_intent",
                       "mycroft.skill.disable_intent",
