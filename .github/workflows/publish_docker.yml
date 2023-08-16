@@ -20,6 +20,9 @@ on:
       image_name:
         type: string
         default: ${{ github.repository }}
+      dockerfile:
+        type: string
+        default: Dockerfile
 
 env:
   REGISTRY: ${{ inputs.registry }}
@@ -69,9 +72,10 @@ jobs:
             type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
             type=ref,event=branch
       - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v4
         with:
           context: .
+          file: ${{ inputs.dockerfile }}
           push: true
           tags: ${{ steps.base_meta.outputs.tags }}
           labels: ${{ steps.base_meta.outputs.labels }}
