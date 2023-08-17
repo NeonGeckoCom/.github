@@ -5,12 +5,12 @@ on:
       runner:
         type: string
         default: "ubuntu-latest"
-    neon_versions:
-      type: string
-      default: "[ 3.7, 3.8, 3.9, '3.10' ]"
-    ovos_versions:
-      type: string
-      default: "[ 3.8, '3.10' ]"
+      neon_versions:
+        type: string
+        default: "[ 3.7, 3.8, 3.9, '3.10' ]"
+      ovos_versions:
+        type: string
+        default: "[ 3.8, '3.10' ]"
 jobs:
   neon_core:
     if: "${{ inputs.neon_versions != '' }}"
