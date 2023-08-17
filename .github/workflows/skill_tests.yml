@@ -16,7 +16,7 @@ jobs:
     if: "${{ inputs.neon_versions != '' }}"
     strategy:
       matrix:
-        python-version: ${{ fromJSON(github.event.inputs.neon_versions) }}
+        python-version: ${{ fromJSON(inputs.neon_versions) }}
     runs-on: ${{inputs.runner}}
     timeout-minutes: 15
     steps:
@@ -41,7 +41,7 @@ jobs:
     if: "${{ inputs.ovos_versions != '' }}"
     strategy:
       matrix:
-        python-version: ${{ fromJSON(github.event.inputs.ovos_versions) }}
+        python-version: ${{ fromJSON(inputs.ovos_versions) }}
     runs-on: ${{inputs.runner}}
     timeout-minutes: 15
     steps:

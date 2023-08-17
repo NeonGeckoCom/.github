@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: ${{inputs.timeout}}
     strategy:
       matrix:
-        python-version: ${{ fromJSON(github.event.inputs.ovos_versions) }}
+        python-version: ${{ fromJSON(inputs.ovos_versions) }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -71,7 +71,7 @@ jobs:
     timeout-minutes: ${{inputs.timeout}}
     strategy:
       matrix:
-        python-version: ${{ fromJSON(github.event.inputs.neon_versions) }}
+        python-version: ${{ fromJSON(inputs.neon_versions) }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
