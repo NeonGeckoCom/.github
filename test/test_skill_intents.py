@@ -186,12 +186,12 @@ class TestSkillIntentMatching(unittest.TestCase):
         intent_failure = Mock()
         self.intent_service.send_complete_intent_failure = intent_failure
 
-        # Skip any fallback/converse handling
-        self.intent_service.fallback = Mock()
-        self.intent_service.converse = Mock()
-        if not self.common_query:
-            # Skip common_qa unless explicitly testing a Common QA skill
-            self.intent_service.common_qa = Mock()
+        # # Skip any fallback/converse handling
+        # self.intent_service.fallback = Mock()
+        # self.intent_service.converse = Mock()
+        # if not self.common_query:
+        #     # Skip common_qa unless explicitly testing a Common QA skill
+        #     self.intent_service.common_qa = Mock()
 
         for lang in self.negative_intents.keys():
             for utt in self.negative_intents[lang]:
