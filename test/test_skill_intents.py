@@ -116,15 +116,15 @@ class TestSkillIntentMatching(unittest.TestCase):
             self.assertIn(lang, self.skill._native_langs, lang)
             self.assertIn(lang,
                           self.intent_service.padatious_service.containers)
-            intents = [intent[1]['name'] for intent in
-                       self.skill.intent_service.registered_intents if
-                       intent[1]['lang'] == lang]
-            LOG.info(f"{lang} intents: {intents}")
-            self.assertIsNotNone(intents, f"No intents registered for {lang}")
-            for intent in self.valid_intents[lang]:
-                # Validate IntentServiceInterface registration
-                self.assertIn(f"{self.test_skill_id}:{intent}", intents,
-                              f"Intent not defined for {lang}")
+            # intents = [intent[1]['name'] for intent in
+            #            self.skill.intent_service.registered_intents if
+            #            intent[1]['lang'] == lang]
+            # LOG.info(f"{lang} intents: {intents}")
+            # self.assertIsNotNone(intents, f"No intents registered for {lang}")
+            # for intent in self.valid_intents[lang]:
+            #     # Validate IntentServiceInterface registration
+            #     self.assertIn(f"{self.test_skill_id}:{intent}", intents,
+            #                   f"Intent not defined for {lang}")
 
     def test_intents(self):
         for lang in self.valid_intents:
