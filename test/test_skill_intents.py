@@ -91,6 +91,8 @@ class TestSkillIntentMatching(unittest.TestCase):
 
     # Start the IntentService
     bus = FakeBus()
+    # Patching FakeBus compat. with MessageBusClient
+    bus.emitter = bus.ee
     from mycroft.skills.intent_service import IntentService
     intent_service = IntentService(bus)
     assert intent_service.padatious_service.is_regex_only == regex_only
