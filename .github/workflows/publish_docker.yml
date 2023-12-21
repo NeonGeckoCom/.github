@@ -29,10 +29,8 @@ on:
         default: Dockerfile
       build_args:
         type: string
-        default: "[]"
       extra_build_args:
         type: string
-        default: "[]"
 
 env:
   REGISTRY: ${{ inputs.registry }}
@@ -91,7 +89,8 @@ jobs:
           target: ${{ inputs.base_tag }}
           platforms: ${{ inputs.platforms }}
           file: ${{ inputs.dockerfile }}
-          build-args: ${{ fromJSON(inputs.build_args) }}
+          build-args: |
+            ${{ inputs.build_args}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -115,6 +114,7 @@ jobs:
           target: ${{ inputs.extra_tag }}
           platforms: ${{ inputs.platforms }}
           file: ${{ inputs.dockerfile }}
-          build-args: ${{ fromJSON(inputs.extra_build_args) }}
+          build-args: |
+            ${{ inputs.extra_build_args }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
