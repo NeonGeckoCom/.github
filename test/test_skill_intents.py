@@ -96,9 +96,6 @@ class TestSkillIntentMatching(unittest.TestCase):
     importlib.reload(ovos_config.config)
     # Start the IntentService
     bus = FakeBus()
-    import mycroft.skills.intent_service
-    assert mycroft.skills.intent_service.Configuration == ovos_config.Configuration
-    print(ovos_config.Configuration()['padatious'])
     from mycroft.skills.intent_service import IntentService
     intent_service = IntentService(bus)
     assert intent_service.padatious_service.is_regex_only == regex_only
@@ -121,7 +118,11 @@ class TestSkillIntentMatching(unittest.TestCase):
 
     def test_00_init(self):
         for lang in self.valid_intents:
-            self.assertIn(lang, self.skill._native_langs, lang)
+            if hasattr(self.skill, "_native_langs"):
+                # ovos-workshop < 0.0.15
+                self.assertIn(lang, self.skill._native_langs, lang)
+            else:
+                self.assertIn(lang, self.skill.native_langs, lang)
             self.assertIn(lang,
                           self.intent_service.padatious_service.containers)
             # intents = [intent[1]['name'] for intent in
