@@ -94,9 +94,10 @@ class TestSkillIntentMatching(unittest.TestCase):
                                "train_delay": 4,
                                "single_thread": False}})
     importlib.reload(ovos_config.config)
-
     # Start the IntentService
     bus = FakeBus()
+    import mycroft.skills.intent_service
+    assert mycroft.skills.intent_service.Configuration == ovos_config.Configuration
     from mycroft.skills.intent_service import IntentService
     intent_service = IntentService(bus)
     assert intent_service.padatious_service.is_regex_only == regex_only
