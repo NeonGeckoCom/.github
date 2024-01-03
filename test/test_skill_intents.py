@@ -98,6 +98,7 @@ class TestSkillIntentMatching(unittest.TestCase):
     bus = FakeBus()
     import mycroft.skills.intent_service
     assert mycroft.skills.intent_service.Configuration == ovos_config.Configuration
+    print(ovos_config.Configuration()['padatious'])
     from mycroft.skills.intent_service import IntentService
     intent_service = IntentService(bus)
     assert intent_service.padatious_service.is_regex_only == regex_only
