@@ -41,8 +41,6 @@ jobs:
         with:
           repository: NeonGeckoCom/.github
           path: action/github/
-          ref: FIX_PadatiousDefaultConfig
-          # TODO: remove `ref` before merge
       - name: Set up python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
