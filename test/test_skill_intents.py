@@ -86,7 +86,13 @@ class TestSkillIntentMatching(unittest.TestCase):
     # Ensure all tested languages are loaded
     import ovos_config
     update_mycroft_config({"secondary_langs": list(valid_intents.keys()),
-                           "padatious": {"regex_only": regex_only}})
+                           "padatious": {
+                               "regex_only": regex_only,
+                               # TODO: below config patching ovos-core default config
+                               #       https://github.com/OpenVoiceOS/ovos-config/pull/78/files#r1439966369
+                               "intent_cache": "~/.local/share/mycroft/intent_cache",
+                               "train_delay": 4,
+                               "single_thread": False}})
     importlib.reload(ovos_config.config)
 
     # Start the IntentService
