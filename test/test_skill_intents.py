@@ -40,7 +40,8 @@ try:
         environ["TEST_PADACIOSO"] = "true"
     environ["TEST_SKILL_ENTRYPOINT"] = getenv("TEST_SKILL_ID")
     from neon_minerva.tests.text_skill_intents import TestSkillIntentMatching
-except ImportError:
+except ImportError as e:
+    LOG.warning(f"Falling back to legacy test method: {e}")
     import importlib
     import unittest
     import yaml
