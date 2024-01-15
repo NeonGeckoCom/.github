@@ -38,7 +38,7 @@ try:
     # Use intent test class from `neon_minerva` if available
     if regex_only:
         environ["TEST_PADACIOSO"] = "true"
-        environ["TEST_SKILL_ENTRYPOINT"] = getenv("TEST_SKILL_ID")
+    environ["TEST_SKILL_ENTRYPOINT"] = getenv("TEST_SKILL_ID")
     from neon_minerva.tests.text_skill_intents import TestSkillIntentMatching
 except ImportError:
     import importlib
