@@ -54,7 +54,7 @@ jobs:
           pip install wheel "cython<3.0.0"  # TODO: cython patching https://github.com/yaml/pyyaml/issues/724
           pip install --no-build-isolation pyyaml~=5.4  # TODO: patching https://github.com/yaml/pyyaml/issues/724
           cd action/skill
-          pip install pytest mock ovos-core[skills,skills_lgpl]>=0.0.7 .[test]
+          pip install pytest mock ovos-core[skills]>=0.0.7 .[test]
       - name: Test Skill Intents Padacioso
         if: ${{ inputs.test_padacioso }}
         run: |

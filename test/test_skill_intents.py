@@ -40,6 +40,7 @@ try:
         environ["TEST_PADACIOSO"] = "true"
     if getenv("TEST_SKILL_ID"):
         environ.setdefault("TEST_SKILL_ENTRYPOINT", getenv("TEST_SKILL_ID"))
+    environ.setdefault("XDG_CACHE_HOME", "/tmp/cache")
     from neon_minerva.tests.test_skill_intents import TestSkillIntentMatching
 except ImportError as e:
     LOG.warning(f"Falling back to legacy test method: {e}")
