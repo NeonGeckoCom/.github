@@ -38,7 +38,8 @@ try:
     # Use intent test class from `neon_minerva` if available
     if regex_only:
         environ["TEST_PADACIOSO"] = "true"
-    environ["TEST_SKILL_ENTRYPOINT"] = getenv("TEST_SKILL_ID")
+    if getenv("TEST_SKILL_ID"):
+        environ.setdefault("TEST_SKILL_ENTRYPOINT", getenv("TEST_SKILL_ID"))
     from neon_minerva.tests.text_skill_intents import TestSkillIntentMatching
 except ImportError as e:
     LOG.warning(f"Falling back to legacy test method: {e}")
@@ -51,6 +52,8 @@ except ImportError as e:
     from ovos_config.config import update_mycroft_config
     from ovos_utils.messagebus import FakeBus
     from mycroft.skills.intent_services.padatious_service import PadatiousMatcher
+
+
     class MockPadatiousMatcher(PadatiousMatcher):
         include_med = True
         include_low = False
