@@ -89,7 +89,6 @@ except ImportError as e:
 
 
     class TestSkillIntentMatching(unittest.TestCase):
-        raise RuntimeError("Using legacy tests!")  # TODO: Remove me
         test_intents = getenv("INTENT_TEST_FILE")
         with open(test_intents) as f:
             valid_intents = yaml.safe_load(f)
