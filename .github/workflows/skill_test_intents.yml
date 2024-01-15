@@ -61,12 +61,14 @@ jobs:
       - name: Test Skill Intents Padacioso
         if: ${{ inputs.test_padacioso }}
         run: |
+          export TEST_SKILL_ENTRYPOINT="${{inputs.skill_entrypoint}}"
           export INTENT_ENGINE="padacioso"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
           pytest action/github/test/test_skill_intents.py
       - name: Test Skill Intents Padatious
         if: ${{ inputs.test_padatious }}
         run: |
+          export TEST_SKILL_ENTRYPOINT="${{inputs.skill_entrypoint}}"
           export INTENT_ENGINE="padatious"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
           pytest action/github/test/test_skill_intents.py
@@ -102,12 +104,14 @@ jobs:
       - name: Test Skill Intents Padacioso
         if: ${{ inputs.test_padacioso }}
         run: |
+          export TEST_SKILL_ENTRYPOINT="${{inputs.skill_entrypoint}}"
           export INTENT_ENGINE="padacioso"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
           pytest action/github/test/test_skill_intents.py
       - name: Test Skill Intents Padatious
         if: ${{ inputs.test_padatious }}
         run: |
+          export TEST_SKILL_ENTRYPOINT="${{inputs.skill_entrypoint}}"
           export INTENT_ENGINE="padatious"
           export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
           pytest action/github/test/test_skill_intents.py
