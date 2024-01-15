@@ -8,6 +8,9 @@ on:
       intent_file:
         type: string
         default: test/test_intents.yaml
+      skill_entrypoint:
+        type: string
+        default: action/skill/
       timeout:
         type: number
         default: 15
