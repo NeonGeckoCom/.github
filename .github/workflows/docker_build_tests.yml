@@ -21,4 +21,4 @@ jobs:
         with:
           platforms: ${{ inputs.platforms }}
       - name: Build image
-        run: docker build --platform=${{ inputs.platforms }} .
+        run: docker buildx build --platform=${{ inputs.platforms }} .
