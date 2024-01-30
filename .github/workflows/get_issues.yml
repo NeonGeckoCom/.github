@@ -1,0 +1,33 @@
+name: Get Organization Issues
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+jobs:
+  get_issues:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          path: action/issue_tracker/
+          repository: mikejgray/github-issue-tracker
+      - name: Set up python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install Issue Tracker
+        run: |
+          python -m pip install action/issue_tracker
+      - name: Get Issues
+        run: |
+          python action/issue_tracker/github_issue_tracker/main.py
+        env:
+          GH_ORGANIZATION: NeonGeckoCom
+          GH_TOKEN: ${{ github.token }}
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Open Issues
+          path: neongeckocom_issues.csv
