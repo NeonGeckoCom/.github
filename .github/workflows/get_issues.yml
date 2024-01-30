@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout Issue Tracker Repository
         uses: actions/checkout@v4
         with:
           path: action/issue_tracker/
@@ -25,10 +25,11 @@ jobs:
         run: |
           python action/issue_tracker/github_issue_tracker/main.py
         env:
+          CSV_FILENAME: /tmp/issues.csv
           GH_ORGANIZATION: NeonGeckoCom
           GH_TOKEN: ${{ github.token }}
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
           name: Open Issues
-          path: neongeckocom_issues.csv
+          path: /tmp/issues.csv
