@@ -11,12 +11,12 @@ jobs:
     runs-on: ${{inputs.runner}}
     timeout-minutes: 15
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout Skill Repository
+        uses: actions/checkout@v4
         with:
           path: action/skill/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
@@ -29,8 +29,7 @@ jobs:
           sudo apt update
           sudo apt install -y gcc git libpulse-dev
           pip install --upgrade pip
-          pip install wheel "cython<3.0.0"  # TODO: cython patching https://github.com/yaml/pyyaml/issues/724
-          pip install --no-build-isolation pyyaml~=5.4  # TODO: patching https://github.com/yaml/pyyaml/issues/724
+          pip install wheel numpy  # numpy patching https://github.com/benfred/parsesetup/issues/3
           pip install -r action/github/scripts/requirements.txt
       - name: Get Updated skill.json
         run: |
