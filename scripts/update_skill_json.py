@@ -38,7 +38,8 @@ from neon_utils.file_utils import parse_skill_readme_file
 
 def _get_setup_py_data(setup_py: str) -> dict:
     setup_meta = parse_setup(setup_py, trusted=True)
-    skill_id = list(setup_meta['entrypoints'].items())[0].split('=')[0]
+    pprint(setup_meta)
+    skill_id = list(setup_meta['entry_points'].values())[0].split('=')[0]
     return {"skill_id": skill_id,
             "source": setup_meta.get("url"),
             "package_name": setup_meta['name'],
