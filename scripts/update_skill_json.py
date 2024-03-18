@@ -27,16 +27,54 @@
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import json
+import shutil
 
 from sys import argv
-from os.path import join
+from os.path import join, isfile
 from pprint import pprint
-from neon_utils.packaging_utils import build_skill_spec
+from parsesetup import parse_setup
+from neon_utils.file_utils import parse_skill_readme_file
 
 
-def get_skill_json(skill_dir: str):
-    print(f"skill_dir={skill_dir}")
-    skill_json = join(skill_dir, "skill.json")
+def _get_setup_py_data(setup_py: str) -> dict:
+    setup_meta = parse_setup(setup_py, trusted=True)
+    pprint(setup_meta)
+    skill_id = list(setup_meta['entry_points'].values())[0].split('=')[0]
+    return {"skill_id": skill_id,
+            "source": setup_meta.get("url"),
+            "package_name": setup_meta['name'],
+            "license": setup_meta.get("license"),
+            "author": setup_meta.get("author"),
+            "description": setup_meta.get("description")}
+
+
+def build_skill_spec(skill_dir: str) -> dict:
+    readme_file = join(skill_dir, "README.md")
+    setup_py = join(skill_dir, "setup.py")
+    if isfile(setup_py):
+        skill_data = _get_setup_py_data(setup_py)
+    readme_data = parse_skill_readme_file(readme_file)
+    skill_data["description"] = readme_data.get("summary") or skill_data["description"]
+    skill_data["name"] = readme_data.get("title")
+    skill_data["examples"] = readme_data.get("examples") or []
+    skill_data["tags"] = readme_data.get("categories",
+                                         []) + readme_data.get("tags", [])
+    skill_data["icon"] = readme_data.get("icon")
+    return skill_data
+
+
+def write_skill_json(skill_dir: str, default_lang="en-us"):
+
+    old_skill_json = join(skill_dir, "skill.json")
+    setup_py = join(skill_dir, "setup.py")
+    pkg_dir = list(parse_setup(setup_py,
+                               trusted=True)['package_dir'].values())[0]
+    skill_json = join(skill_dir, pkg_dir, "locale", default_lang, "skill.json")
+    print(f"skill_dir={skill_dir}|skill.json={skill_json}")
+
+    if isfile(old_skill_json):
+        shutil.move(old_skill_json, skill_json)
+
     skill_spec = build_skill_spec(skill_dir)
     pprint(skill_spec)
     try:
@@ -45,6 +83,8 @@ def get_skill_json(skill_dir: str):
     except Exception as e:
         print(e)
         current = None
+    if current:
+        skill_spec["extra_plugins"] = current.get("extra_plugins") or dict()
     if current != skill_spec:
         print("Skill Updated. Writing skill.json")
         with open(skill_json, 'w+') as f:
@@ -54,4 +94,4 @@ def get_skill_json(skill_dir: str):
 
 
 if __name__ == "__main__":
-    get_skill_json(argv[1])
+    write_skill_json(argv[1])

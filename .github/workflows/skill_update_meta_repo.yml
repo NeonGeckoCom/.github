@@ -12,10 +12,13 @@ jobs:
     runs-on: ${{inputs.runner}}
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Skill Repository
+        uses: actions/checkout@v4
       - name: Update skill.json in neon_skills
         run: |
+          version=$(python3 setup.py --version)
           git clone https://github.com/neongeckocom/neon_skills -b ${{github.ref_name}}
+          cp skill.json neon_skills/skill_metadata/${{github.event.repository.name}}-${version}.json
           cp skill.json neon_skills/skill_metadata/${{github.event.repository.name}}.json
       - name: Push neon_skills changes
         uses: cpina/github-action-push-to-another-repository@main
