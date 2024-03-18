@@ -20,6 +20,8 @@ jobs:
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
+          ref: FEAT_UpdateSkillMetaParsing
+          # TODO: Remove ref before merge
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
