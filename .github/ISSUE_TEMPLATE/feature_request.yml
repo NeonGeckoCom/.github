@@ -3,6 +3,7 @@ description: Request a new feature
 title: "[FEAT] "
 labels:
   - enhancement
+  - triage
 body:
   - type: textarea
     id: objective

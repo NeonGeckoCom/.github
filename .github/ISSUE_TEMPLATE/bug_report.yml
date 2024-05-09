@@ -3,6 +3,7 @@ description: Report a bug
 title: "[BUG] "
 labels:
   - bug
+  - triage
 body:
   - type: textarea
     id: description
