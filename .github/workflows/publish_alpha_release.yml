@@ -64,12 +64,12 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
@@ -106,7 +106,7 @@ jobs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
@@ -139,12 +139,12 @@ jobs:
     runs-on: ${{inputs.runner}}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
@@ -172,7 +172,7 @@ jobs:
     runs-on: ${{inputs.runner}}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
