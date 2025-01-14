@@ -8,6 +8,9 @@ on:
       setup_qemu:
         type: boolean
         default: false
+      include_semver:
+        type: boolean
+        default: true
       base_tag:
         type: string
         required: false
@@ -40,7 +43,7 @@ jobs:
   build_and_publish_docker:
     runs-on: ${{inputs.runner}}
     outputs:
-      version: ${{ steps.version.version }}
+      version: ${{ steps.version.outputs.version }}
     permissions:
       contents: read
       packages: write
@@ -61,7 +64,7 @@ jobs:
         id: version
         run: |
           VERSION=$(sed "s/a/-a./" <<< $(python setup.py --version))
-          echo ::set-output name=version::${VERSION}
+          echo "version=${VERSION}" >> ${GITHUB_OUTPUT}
         env:
           image_name: ${{ env.IMAGE_NAME }}
 
@@ -72,6 +75,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Extract metadata for base Docker
+        if: ${{ inputs.include_semver }}
         id: base_meta
         uses: docker/metadata-action@v2
         with:
@@ -79,13 +83,22 @@ jobs:
           tags: |
             type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
             type=ref,event=branch
+      - name: Extract metadata for base Docker (no semver)
+        if: ${{ !inputs.include_semver }}
+        id: base_meta_no_semver
+        uses: docker/metadata-action@v2
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.base_meta.outputs.tags }}
-          labels: ${{ steps.base_meta.outputs.labels }}
+          tags: ${{ steps.base_meta.outputs.tags || steps.base_meta_no_semver.outputs.tags}}
+          labels: ${{ steps.base_meta.outputs.labels || steps.base_meta_no_semver.outputs.labels}}
           target: ${{ inputs.base_tag }}
           platforms: ${{ inputs.platforms }}
           file: ${{ inputs.dockerfile }}
@@ -95,7 +108,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Extract metadata for extra Docker
-        if: "${{ inputs.extra_tag != '' }}"
+        if: "${{ inputs.extra_tag != '' && inputs.include_semver }}"
         id: extra_meta
         uses: docker/metadata-action@v2
         with:
@@ -103,14 +116,24 @@ jobs:
           tags: |
             type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
             type=ref,event=branch
+
+      - name: Extract metadata for extra Docker (no semver)
+        if: "${{ inputs.extra_tag != '' && !inputs.include_semver }}"
+        id: extra_meta_no_semver
+        uses: docker/metadata-action@v2
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ inputs.extra_tag }}
+          tags: |
+            type=ref,event=branch
+
       - name: Build and push extra Docker image
         if: "${{ inputs.extra_tag != '' }}"
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.extra_meta.outputs.tags }}
-          labels: ${{ steps.extra_meta.outputs.labels }}
+          tags: ${{ steps.extra_meta.outputs.tags || steps.extra_meta_no_semver.outputs.tags }}
+          labels: ${{ steps.extra_meta.outputs.labels || steps.extra_meta_no_semver.outputs.labels }}
           target: ${{ inputs.extra_tag }}
           platforms: ${{ inputs.platforms }}
           file: ${{ inputs.dockerfile }}
