@@ -13,7 +13,7 @@ on:
         default: 3.12
       packages-exclude:
         type: string
-        default: '^(precise-runner|fann2|tqdm|bs4|ovos-phal-plugin|ovos-skill|neon-core|nvidia|neon-phal-plugin|bitstruct).*'
+        default: '^(precise-runner|fann2|tqdm|bs4|ovos-phal-plugin|ovos-skill|neon-core|nvidia|neon-phal-plugin|bitstruct|attrs).*'
       licenses-exclude:
         type: string
         default: '^(Mozilla|NeonAI License v1.0).*$'
