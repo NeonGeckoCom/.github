@@ -27,7 +27,7 @@ target_langs = (single_lang,) if single_lang else (
     "uk-ua"
 )
 
-base_folder = "F:/work/skill-weather-dev"
+base_folder = os.getenv("SKILL_DIRECTORY")
 print(f"Translating files in: {base_folder}")
 res_folder = join(base_folder, "locale")
 
