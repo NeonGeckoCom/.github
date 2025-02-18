@@ -31,12 +31,12 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y gcc git
-          pip install -r action/github/requirements/auto_translate_skill.txt
+          pip install -r ${{github.workspace}}/action/github/requirements/auto_translate_skill.txt
       - name: Translate Skill
         run: |
-          python action/github/scripts/auto_translate_skill.py
+          python ${{github.workspace}}/action/github/scripts/auto_translate_skill.py
         env:
-          SKILL_DIRECTORY: action/skill
+          SKILL_DIRECTORY: ${{github.workspace}}/action/skill
           TARGET_LANG: ${{inputs.target_lang}}
           DEEPL_API_KEY: ${{secrets.DEEPL_API_KEY}}
       - name: Push Translation
