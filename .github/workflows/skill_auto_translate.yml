@@ -36,7 +36,7 @@ jobs:
         run: |
           python action/github/scripts/auto_translate_skill.py
         env:
-          SKILL_DIRECTORY: ${{GITHUB_WORKSPACE}}/action/skill
+          SKILL_DIRECTORY: action/skill
           TARGET_LANG: ${{inputs.target_lang}}
           DEEPL_API_KEY: ${{secrets.DEEPL_API_KEY}}
       - name: Push Translation
