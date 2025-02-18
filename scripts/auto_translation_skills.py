@@ -201,9 +201,3 @@ for lang in target_langs:
 
     print(f"Translation for {lang} completed.")
 
-if __name__ == "__main__":
-    from sys import argv
-    if len(argv) > 2:
-        skill_path = argv[1]
-    else:
-        skill_path = os.path.dirname(os.path.dirname(__file__))
