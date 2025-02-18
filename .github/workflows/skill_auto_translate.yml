@@ -23,6 +23,8 @@ jobs:
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
+          ref: FEAT_AutomateSkillTranslation
+          # TODO: Default ref
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
