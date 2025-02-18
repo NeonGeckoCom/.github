@@ -14,7 +14,7 @@ export SKILL_DIRECTORY=/home/$USER/skill-directory
 python3 translate.py
 """
 
-API_KEY = '6f0f043a-6274-4527-b8fc-95720b03f70c'
+API_KEY = os.getenv("DEEPL_API_KEY")
 if not API_KEY:
     raise ValueError("API Key is not specified")
 
