@@ -47,3 +47,4 @@ jobs:
           commit_message: Update ${{inputs.target_lang}} Translation
           repository: action/skill/
           branch: XLATE_${{inputs.target_lang}}
+          create_branch: true
