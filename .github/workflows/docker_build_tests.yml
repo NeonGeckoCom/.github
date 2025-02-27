@@ -9,6 +9,9 @@ on:
         type: string
         required: false
         default: linux/amd64
+      dockerfile:
+        type: string
+        default: Dockerfile
 jobs:
   docker_build_tests:
     timeout-minutes: 60
@@ -22,4 +25,4 @@ jobs:
           platforms: ${{ inputs.platforms }}
           install: true
       - name: Build image
-        run: docker build --platform=${{ inputs.platforms }} .
+        run: docker build --platform=${{ inputs.platforms }} -f ${{inputs.dockerfile}} .
