@@ -1,0 +1,2 @@
+ovos-utils~=0.1
+ovos-translate-plugin-deepl~=0.0

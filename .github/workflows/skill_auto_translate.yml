@@ -5,9 +5,12 @@ on:
       runner:
         type: string
         default: "ubuntu-latest"
+      target_lang:
+        type: string
+        default: "uk-ua"
 
 jobs:
-  update_skill_json:
+  translate_skill:
     runs-on: ${{inputs.runner}}
     timeout-minutes: 15
     steps:
@@ -27,16 +30,19 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y gcc git libpulse-dev
-          pip install --upgrade pip
-          pip install wheel "cython<3.0.0"  # TODO: cython patching https://github.com/yaml/pyyaml/issues/724
-          pip install --no-build-isolation pyyaml~=5.4  # TODO: patching https://github.com/yaml/pyyaml/issues/724
-          pip install -r action/github/requirements/update_skill_json.txt
-      - name: Get Updated skill.json
+          sudo apt install -y gcc git
+          pip install -r ${{github.workspace}}/action/github/requirements/auto_translate_skill.txt
+      - name: Translate Skill
         run: |
-          python action/github/scripts/update_skill_json.py action/skill
-      - name: Push skill.json Change
+          python ${{github.workspace}}/action/github/scripts/auto_translate_skill.py
+        env:
+          SKILL_DIRECTORY: ${{github.workspace}}/action/skill
+          TARGET_LANG: ${{inputs.target_lang}}
+          DEEPL_API_KEY: ${{secrets.DEEPL_API_KEY}}
+      - name: Push Translation
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Update skill.json
+          commit_message: Update ${{inputs.target_lang}} Translation
           repository: action/skill/
+          branch: XLATE_${{inputs.target_lang}}
+          create_branch: true
