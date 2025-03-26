@@ -1,0 +1,68 @@
+name: Skill Integration Tests
+on:
+  workflow_call:
+    inputs:
+      intent_file:
+        type: string
+        default: test/test_intents.yaml
+      python_version:
+        type: string
+        default: '3.10'
+      skills_list:
+        type: string
+        default: "https://raw.githubusercontent.com/NeonGeckoCom/neon_skills/dev/skill_lists/test_neon_defaults.txt"
+jobs:
+  test_intents_ovos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          path: action/skill/
+      - name: Checkout Scripts Repo
+        uses: actions/checkout@v2
+        with:
+          repository: NeonGeckoCom/.github
+          path: action/github/
+      - name: Set up python ${{ inputs.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python_version }}
+      - name: Install Dependencies
+        run: |
+          sudo apt install -y gcc libfann-dev swig libssl-dev portaudio19-dev git libpulse-dev wget
+          wget ${{inputs.skills_list}} -O skills.txt
+          pip install --upgrade pip
+          pip install pytest mock ovos-core[skills] action/skill/ -r skills.txt
+      - name: Test Skill Intents
+        run: |
+          export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
+          pytest action/github/test/test_skill_intents.py
+  test_intents_neon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          path: action/skill/
+      - name: Checkout Scripts Repo
+        uses: actions/checkout@v2
+        with:
+          repository: NeonGeckoCom/.github
+          path: action/github/
+      - name: Set up python ${{ inputs.python_version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python_version }}
+      - name: Install Dependencies
+        run: |
+          sudo apt install -y gcc libfann-dev swig libssl-dev portaudio19-dev git libpulse-dev
+          wget ${{inputs.skills_list}} -O skills.txt
+          pip install --upgrade pip
+          pip install pytest mock git+https://github.com/NeonGeckoCom/NeonCore#egg=neon_core action/skill/ -r skills.txt
+      - name: Test Skill Intents
+        run: |
+          export INTENT_TEST_FILE="action/skill/${{inputs.intent_file}}"
+          pytest action/github/test/test_skill_intents.py
