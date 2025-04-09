@@ -1,4 +1,4 @@
-name: Skill Unit Tests
+name: Skill Resource Tests
 on:
   workflow_call:
     inputs:
@@ -17,16 +17,16 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/skill/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: NeonGeckoCom/.github
           path: action/github/
       - name: Set up python 3.10
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
       - name: Install Dependencies
@@ -34,7 +34,7 @@ jobs:
           sudo apt update
           sudo apt install -y gcc libfann-dev swig libssl-dev portaudio19-dev git libpulse-dev
           pip install --upgrade pip
-          pip install wheel "cython<3.0.0"  # TODO: cython patching https://github.com/yaml/pyyaml/issues/724
+          pip install setuptools wheel "cython<3.0.0"  # TODO: cython patching https://github.com/yaml/pyyaml/issues/724
           pip install --no-build-isolation pyyaml~=5.4  # TODO: patching https://github.com/yaml/pyyaml/issues/724
           pip install ovos-core[skills]>=0.0.7 pytest mock neon-minerva~=0.1  # TODO: Left for backwards-compat
           pip install action/skill[test]
