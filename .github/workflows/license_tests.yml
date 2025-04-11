@@ -10,10 +10,10 @@ on:
         type: string
       python-version:
         type: string
-        default: 3.12
+        default: "3.12"
       packages-exclude:
         type: string
-        default: '^(precise-runner|fann2|tqdm|bs4|ovos-phal-plugin|ovos-skill|neon-core|nvidia|neon-phal-plugin|bitstruct|attrs|RapidFuzz|typing_extensions|audioread).*'
+        default: '^(precise-runner|fann2|tqdm|bs4|ovos-phal-plugin|ovos-skill|neon-core|nvidia|neon-phal-plugin|bitstruct|attrs|RapidFuzz|typing_extensions|audioread|urllib3).*'
       licenses-exclude:
         type: string
         default: '^(Mozilla|NeonAI License v1.0).*$'
