@@ -25,7 +25,7 @@ on:
         default: "[ 3.9, '3.10', '3.11' ]"
       ovos_versions:
         type: string
-        default: "[ '3.10' '3.11' ]"
+        default: "[ '3.10', '3.11' ]"
 jobs:
   test_intents_ovos:
     if: "${{ inputs.ovos_versions != '' }}"
