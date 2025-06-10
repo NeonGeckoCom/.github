@@ -81,6 +81,9 @@ def bump_version(version_file: str, version_spec: str):
     for line in fileinput.input(version_file, inplace=True):
         if line.startswith("__version__"):
             print(f"__version__ = \"{version}\"")
+        elif line.startswith("__version_ts__"):
+            from time import time
+            print(f"__version_ts__ = {int(time())}")
         else:
             print(line.rstrip('\n'))
 
