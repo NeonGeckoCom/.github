@@ -23,6 +23,10 @@ on:
       image_name:
         type: string
         default: ${{ github.repository }}
+      image_tag:
+        type: string
+        required: false
+        description: "If set, apply additional tag to the output image"
       platforms:
         type: string
         required: false
@@ -87,6 +91,7 @@ jobs:
           tags: |
             type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
             type=ref,event=branch
+            ${{ inputs.image_tag && format('type=raw,{0}', inputs.image_tag) }}
       - name: Extract metadata for base Docker (no semver)
         if: ${{ !inputs.include_semver }}
         id: base_meta_no_semver
