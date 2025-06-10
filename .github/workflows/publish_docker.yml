@@ -89,7 +89,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
+            ${{ inputs.image_tag || format('type=semver,pattern={{version}},value={0}', steps.version.outputs.version) }}
             type=ref,event=branch
             ${{ inputs.image_tag && format('type=raw,{0}', inputs.image_tag) }}
       - name: Extract metadata for base Docker (no semver)
