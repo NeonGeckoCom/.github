@@ -23,6 +23,10 @@ on:
       image_name:
         type: string
         default: ${{ github.repository }}
+      image_tag:
+        type: string
+        required: false
+        description: "If set, apply additional tag to the output image"
       platforms:
         type: string
         required: false
@@ -95,6 +99,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=branch
+            ${{ inputs.image_tag && format('type=raw,{0}', inputs.image_tag) }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -129,6 +134,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-${{ inputs.extra_tag }}
           tags: |
             type=ref,event=branch
+            ${{ inputs.image_tag && format('type=raw,{0}', inputs.image_tag) }}
 
       - name: Build and push extra Docker image
         if: "${{ inputs.extra_tag != '' }}"
