@@ -13,10 +13,10 @@ on:
         default: "3.12"
       packages-exclude:
         type: string
-        default: '^(precise-runner|fann2|ovos-phal-plugin|neon-core|neon-phal-plugin).*'
+        default: '^(fann2|neon-core|neon-phal-plugin|ovos-phal-plugin|precise-runner|tqdm).*'
       licenses-exclude:
         type: string
-        default: '^(PSF-2.0|MPL 2.0|NeonAI License v1.0).*$'
+        default: '^(PSF-2.0|MPL|Mozilla|NeonAI License v1.0).*'
 jobs:
   license_tests:
     timeout-minutes: 15
