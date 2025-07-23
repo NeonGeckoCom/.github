@@ -13,10 +13,10 @@ on:
         default: "3.12"
       packages-exclude:
         type: string
-        default: '^(precise-runner|fann2|tqdm|bs4|ovos-phal-plugin|ovos-skill|neon-core|nvidia|neon-phal-plugin|bitstruct|attrs|RapidFuzz|typing_extensions|audioread|urllib3|setuptools|click|typing-inspection|zipp).*'
+        default: '^(fann2|neon-core|neon-phal-plugin|ovos-phal-plugin|ovos-skill|precise-runner|tqdm).*'
       licenses-exclude:
         type: string
-        default: '^(Mozilla|NeonAI License v1.0).*$'
+        default: '^(PSF-2.0|MPL|Mozilla|NeonAI License v1.0).*'
 jobs:
   license_tests:
     timeout-minutes: 15
@@ -46,7 +46,7 @@ jobs:
           pip freeze > requirements-all.txt
       - name: Check python
         id: license_check_report
-        uses: pilosus/action-pip-license-checker@v0.5.0
+        uses: pilosus/action-pip-license-checker@v3
         with:
           requirements: 'requirements-all.txt'
           fail: 'Copyleft,Other,Error'
