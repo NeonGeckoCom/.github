@@ -13,7 +13,7 @@ on:
         type: string
         default: Dockerfile
       build_timeout:
-        type: int
+        type: number
         default: 60
 jobs:
   docker_build_tests:
