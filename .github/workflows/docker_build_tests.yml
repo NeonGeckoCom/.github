@@ -12,9 +12,12 @@ on:
       dockerfile:
         type: string
         default: Dockerfile
+      build_timeout:
+        type: number
+        default: 60
 jobs:
   docker_build_tests:
-    timeout-minutes: 60
+    timeout-minutes: ${{ inputs.build_timeout }}
     runs-on: ${{inputs.runner}}
     steps:
       - name: Checkout Repository
