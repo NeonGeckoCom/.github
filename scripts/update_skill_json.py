@@ -31,13 +31,13 @@ import json
 from sys import argv
 from os.path import join
 from pprint import pprint
-from neon_utils.packaging_utils import build_skill_spec
+from neon_utils.skill_utils import get_skill_metadata
 
 
 def get_skill_json(skill_dir: str):
     print(f"skill_dir={skill_dir}")
     skill_json = join(skill_dir, "skill.json")
-    skill_spec = build_skill_spec(skill_dir)
+    skill_spec = get_skill_metadata(skill_dir)
     pprint(skill_spec)
     try:
         with open(skill_json) as f:

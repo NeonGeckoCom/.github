@@ -26,6 +26,9 @@ on:
       publish_pypi:
         type: boolean
         default: True
+      update_skill_json:
+        type: boolean
+        default: False
       version_scheme:
         type: string
         default: semver
@@ -64,17 +67,17 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
       - name: Setup Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
       - name: Increment Alpha Version
@@ -106,7 +109,7 @@ jobs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
@@ -131,25 +134,34 @@ jobs:
         with:
           commit_message: Update Changelog
           repository: action/package/
+  update_skill_json:
+    if: ${{ always() && inputs.update_skill_json }}
+    needs: 
+      - bump_version
+      - update_changelog
+    uses: NeonGeckoCom/.github/.github/workflows/skill_update_json_spec.yml@master
+    with:
+      branch: ${{ inputs.branch }}
   build_and_publish_pypi:
     if: ${{ always() && inputs.publish_pypi }}
     needs:
+      - update_skill_json
       - update_changelog
       - bump_version
     runs-on: ${{inputs.runner}}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
       - name: Setup Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
       - name: Install Build Tools
@@ -168,11 +180,12 @@ jobs:
     needs:
       - update_changelog
       - bump_version
+      - update_skill_json
     if: ${{ always() && inputs.publish_prerelease }}
     runs-on: ${{inputs.runner}}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
