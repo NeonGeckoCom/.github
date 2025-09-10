@@ -136,17 +136,11 @@ jobs:
           repository: action/package/
   update_skill_json:
     if: ${{ always() && inputs.update_skill_json }}
-    runs-on: ${{inputs.runner}}
     needs: 
       - bump_version
       - update_changelog
-    steps:
-      - name: Update skill.json
-        uses: NeonGeckoCom/.github/.github/workflows/skill_update_json_spec.yml@FEAT_UpdateSkillJsonAction
-        # TODO: Revert above to `master`
-      - name: Update skill index
-        uses: NeonGeckoCom/.github/.github/workflows/skill_update_meta_repo.yml@FEAT_UpdateSkillJsonAction
-        # TODO: Revert above to `master`
+    uses: NeonGeckoCom/.github/.github/workflows/skill_update_json_spec.yml@FEAT_UpdateSkillJsonAction
+    # TODO: Revert above to `master`
   build_and_publish_pypi:
     if: ${{ always() && inputs.publish_pypi }}
     needs:
