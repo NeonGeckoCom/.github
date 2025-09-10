@@ -5,6 +5,9 @@ on:
       runner:
         type: string
         default: "ubuntu-latest"
+      branch:
+        type: string
+        default: ${{ github.ref }}
 
 jobs:
   update_skill_json:
@@ -15,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: action/skill/
+          ref: ${{ inputs.branch }}
       - name: Checkout Scripts Repo
         uses: actions/checkout@v4
         with:
