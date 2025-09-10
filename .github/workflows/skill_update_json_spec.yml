@@ -29,8 +29,6 @@ jobs:
           sudo apt update
           sudo apt install -y gcc git libpulse-dev
           pip install --upgrade pip
-          pip install wheel "cython<3.0.0"  # TODO: cython patching https://github.com/yaml/pyyaml/issues/724
-          pip install --no-build-isolation pyyaml~=5.4  # TODO: patching https://github.com/yaml/pyyaml/issues/724
           pip install -r action/github/requirements/update_skill_json.txt
       - name: Get Updated skill.json
         run: |
