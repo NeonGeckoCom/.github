@@ -139,8 +139,7 @@ jobs:
     needs: 
       - bump_version
       - update_changelog
-    uses: NeonGeckoCom/.github/.github/workflows/skill_update_json_spec.yml@FEAT_UpdateSkillJsonAction
-    # TODO: Revert above to `master`
+    uses: NeonGeckoCom/.github/.github/workflows/skill_update_json_spec.yml@master
     with:
       branch: ${{ inputs.branch }}
   build_and_publish_pypi:
