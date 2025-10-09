@@ -35,7 +35,7 @@ jobs:
           pip install -r action/github/requirements/update_skill_json.txt
       - name: Get Updated skill.json
         run: |
-          python action/github/scripts/update_skill_json.py action/skill
+          python ${GITHUB_WORKSPACE}/action/github/scripts/update_skill_json.py ${GITHUB_WORKSPACE}/action/skill
       - name: Push skill.json Change
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
