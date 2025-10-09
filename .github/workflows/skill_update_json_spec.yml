@@ -20,6 +20,7 @@ jobs:
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
+          ref: FIX_SkillJsonDependency
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
