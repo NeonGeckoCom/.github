@@ -26,6 +26,9 @@ on:
       publish_pypi:
         type: boolean
         default: True
+      pypi_url:
+        type: string
+        default: "https://upload.pypi.org/legacy/"
       version_scheme:
         type: string
         default: semver
@@ -164,6 +167,7 @@ jobs:
         with:
           packages_dir: action/package/dist/
           password: ${{secrets.PYPI_TOKEN}}
+          repository-url: ${{ inputs.pypi_url }}
   tag_prerelease:
     needs:
       - update_changelog
