@@ -26,6 +26,9 @@ on:
       publish_pypi:
         type: boolean
         default: True
+      pypi_url:
+        type: string
+        default: "https://upload.pypi.org/legacy/"
       version_scheme:
         type: string
         default: semver
@@ -64,19 +67,22 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
       - name: Setup Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.14"
+      - name: Install Build Tools
+        run: |
+          python -m pip install setuptools
       - name: Increment Alpha Version
         id: version
         run: |
@@ -88,7 +94,7 @@ jobs:
           elif [ ${{ inputs.version_scheme }} == "dated" ]; then
             python action/github/scripts/dated_version_bump.py action/package/${{ inputs.version_file }} true
           fi
-          echo ::set-output name=version::$(python action/package/${{ inputs.setup_py }} --version)
+          echo "version=$(python action/package/${{ inputs.setup_py }} --version)" >> $GITHUB_OUTPUT
       - name: Run Extra Update Script
         if: "${{ inputs.on_version_change != '' }}"
         run: |
@@ -106,7 +112,7 @@ jobs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
@@ -139,22 +145,22 @@ jobs:
     runs-on: ${{inputs.runner}}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
       - name: Checkout Scripts Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: action/github/
           repository: NeonGeckoCom/.github
       - name: Setup Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.14"
       - name: Install Build Tools
         run: |
-          python -m pip install build wheel
+          python -m pip install build wheel setuptools
       - name: Build Distribution Packages
         run: |
           cd action/package
@@ -162,8 +168,10 @@ jobs:
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages_dir: action/package/dist/
+          packages-dir: action/package/dist/
           password: ${{secrets.PYPI_TOKEN}}
+          repository-url: ${{ inputs.pypi_url }}
+          attestations: false
   tag_prerelease:
     needs:
       - update_changelog
@@ -172,7 +180,7 @@ jobs:
     runs-on: ${{inputs.runner}}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
           path: action/package/
