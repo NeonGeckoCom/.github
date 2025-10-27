@@ -94,7 +94,7 @@ jobs:
           elif [ ${{ inputs.version_scheme }} == "dated" ]; then
             python action/github/scripts/dated_version_bump.py action/package/${{ inputs.version_file }} true
           fi
-          echo ::set-output name=version::$(python action/package/${{ inputs.setup_py }} --version)
+          echo "version=$(python action/package/${{ inputs.setup_py }} --version)" >> $GITHUB_OUTPUT
       - name: Run Extra Update Script
         if: "${{ inputs.on_version_change != '' }}"
         run: |
