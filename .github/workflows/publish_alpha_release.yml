@@ -165,9 +165,10 @@ jobs:
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages_dir: action/package/dist/
+          packages-dir: action/package/dist/
           password: ${{secrets.PYPI_TOKEN}}
           repository-url: ${{ inputs.pypi_url }}
+          verbose: true
   tag_prerelease:
     needs:
       - update_changelog
