@@ -168,7 +168,7 @@ jobs:
           packages-dir: action/package/dist/
           password: ${{secrets.PYPI_TOKEN}}
           repository-url: ${{ inputs.pypi_url }}
-          verbose: true
+          attestations: false
   tag_prerelease:
     needs:
       - update_changelog
