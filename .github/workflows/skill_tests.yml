@@ -7,10 +7,10 @@ on:
         default: "ubuntu-latest"
       neon_versions:
         type: string
-        default: "[ 3.8, 3.9, '3.10', '3.11' ]"
+        default: "[ 3.9, '3.10', '3.11', '3.12' ]"
       ovos_versions:
         type: string
-        default: "[ 3.8, '3.10' ]"
+        default: "[ '3.10', '3.11' ]"
 jobs:
   neon_core:
     if: "${{ inputs.neon_versions != '' }}"
@@ -31,8 +31,6 @@ jobs:
           sudo apt update
           sudo apt install -y gcc libfann-dev swig libssl-dev portaudio19-dev git libpulse-dev
           pip install --upgrade pip
-          pip install setuptools wheel "cython<3.0.0"  # TODO: cython patching https://github.com/yaml/pyyaml/issues/724
-          pip install --no-build-isolation pyyaml~=5.4  # TODO: patching https://github.com/yaml/pyyaml/issues/724
           pip install pytest mock git+https://github.com/NeonGeckoCom/NeonCore#egg=neon_core .[test]
           # TODO: `mock` left for backwards-compat. skills should specify their own test deps
       - name: Test Skill
