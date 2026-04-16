@@ -10,7 +10,7 @@ on:
         default: "[ 3.9, '3.10', '3.11', '3.12' ]"
       ovos_versions:
         type: string
-        default: "[ '3.10', '3.12' ]"
+        default: "[ '3.10', '3.11' ]"
 jobs:
   neon_core:
     if: "${{ inputs.neon_versions != '' }}"
