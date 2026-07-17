@@ -36,3 +36,4 @@ jobs:
           pr_draft: ${{ inputs.pr_draft }}
           pr_title: ${{ inputs.pr_title }}
           pr_body: ${{ inputs.pr_body }}
+          destination_branch: ${{ inputs.destination }}
