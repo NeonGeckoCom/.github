@@ -8,7 +8,7 @@ on:
       python_version:
         required: false
         type: string
-        default: "3.8"
+        default: "3.11"
       test_manifest:
         required: false
         type: boolean
